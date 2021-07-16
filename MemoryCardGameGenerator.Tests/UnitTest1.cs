@@ -18,34 +18,32 @@ namespace MemoryCardGameGenerator.Tests
         [TestMethod]
         public void TestSkiaSharpGridDraw()
         {
-            var skImage = Play.DrawSkGrid(4, 5);
-            using (var data = skImage.Encode(SKEncodedImageFormat.Png, 100))
-            using (var stream = File.OpenWrite("skOutput.png"))
+            var ut = new Grid(4, 5);
+            var spec = new CardPairSpec(new ChineseCardSpec("二", "èr"), new EnglishCardSpec("Two"));
+            ut.AddCard(spec);
+            var spec2 = new CardPairSpec(new ChineseCardSpec("一", "yi"), new EnglishCardSpec("One"));
+            ut.AddCard(spec2);
+            var spec3 = new CardPairSpec(new ChineseCardSpec("人", "ren"), new EnglishCardSpec("person"));
+            ut.AddCard(spec3);
+            using (var stream = File.OpenWrite("skOutput2.png"))
             {
-                data.SaveTo(stream);
+                ut.RenderToPng(stream);
             }
-
         }
-        
-        
+
+
         [TestMethod]
         public void TestMethod1()
         {
-            var spec = new Play.CardPairSpec(new Play.ChineseCardSpec("二", "èr"), new Play.EnglishCardSpec("Two"));
-                
-            var testImage = Play.BuildPage(new[] { spec });
-            using (var output = new FileStream("test.png", FileMode.Create, FileAccess.ReadWrite))
-            {
-                testImage.Save(output, new PngEncoder());
-            }
-            //Process.Start("test.png");
-                        
+
+
+
         }
 
         [TestMethod]
         public void TestFontLoad()
         {
-            var r = Play.LoadChineseFonts();
+            var r = CardDrawingFunctions.LoadChineseFonts();
             foreach (var f in r.Families)
             {
                 System.Console.WriteLine(f.Name);
@@ -56,7 +54,7 @@ namespace MemoryCardGameGenerator.Tests
         [TestMethod]
         public void TestFontDraw()
         {
-            var fonts = Play.LoadChineseFonts();
+            var fonts = CardDrawingFunctions.LoadChineseFonts();
             var font = fonts.CreateFont("Microsoft YaHei", 36, FontStyle.Bold);
             var image = new Image<Bgr24>(200, 200);
             image.Mutate(i => i.DrawText("hello", font, Color.Red, new Point(0, 0)));
