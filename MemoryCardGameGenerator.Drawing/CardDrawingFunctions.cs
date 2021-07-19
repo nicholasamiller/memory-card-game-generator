@@ -29,7 +29,9 @@ namespace MemoryCardGameGenerator.Drawing
         private SKRect _gridArea;
         private Queue<SKRect> _cardRegions;
         private Queue<CardPairSpec> _cards = new Queue<CardPairSpec>();
-        private SKTypeface _chineseFont;
+        private SKTypeface _boldTypeFace;
+        private SKTypeface _regularTypeFace;
+        private readonly SKTypeface _lightTypeFace;
         
         public Grid(int cardsPerRow, int cardsPerColumn)
         {
@@ -44,17 +46,42 @@ namespace MemoryCardGameGenerator.Drawing
             _cardRegions = new Queue<SKRect>(GetCardRegions(_gridArea));
 
             using (var ms = new MemoryStream(Properties.Resources.msyhbd))
-                _chineseFont = SKTypeface.FromStream(ms);
+            {
+                _boldTypeFace = SKTypeface.FromStream(ms);
+            }
+
+            using (var ms = new MemoryStream(Properties.Resources.msyh))
+            {
+                _regularTypeFace = SKTypeface.FromStream(ms);
+            }
             
+            using (var ms = new MemoryStream(Properties.Resources.msyhl))
+            {
+                _lightTypeFace = SKTypeface.FromStream(ms);
+            }
+
+
+
         }
-        
+
 
         public void AddCard(CardPairSpec cardPairSpec)
         {
             _cards.Enqueue(cardPairSpec);
         }
+        
+        private string PadTextTo(int totalWidth, string text)
+        {
+            var textLength = text.Length;
+            var padding = totalWidth - textLength;
+            if (padding <= 0)
+            {
+                return text;
+            }
+            return text.PadLeft(totalWidth / 2).PadRight(totalWidth / 2);
+        }
 
-        private void DrawTextCenteredInsideRect(SKRect rect, string text, SKTypeface sKTypeface, SKCanvas canvas)
+        private void DrawTextVisuallyCenteredInsideRect(SKRect rect, string text, SKTypeface sKTypeface, float upwardsOffsetProportion, SKCanvas canvas)
         {
             var paddingPropertion = 0.5f;
             var paint = new SKPaint
@@ -70,30 +97,32 @@ namespace MemoryCardGameGenerator.Drawing
 
             SKRect textBounds = new SKRect();
             paint.MeasureText(text, ref textBounds);
-
-            var centerOfText = new SKPoint(rect.Left +  rect.Width / 2 - textBounds.MidX, rect.Top +  rect.Height / 2 - textBounds.MidY);
+        
+            var centerOfText = new SKPoint(rect.Left +  rect.Width / 2 - textBounds.MidX, rect.Top +  (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textBounds.MidY);
             canvas.DrawText(text, centerOfText, paint);
-
         }
+                
 
         private void DrawChineseCard(SKRect region, ChineseCardSpec chineseCardSpec, SKCanvas canvas)
         {
-          
             float amountToLeaveForSubtitles = region.Height * 1 / 4;
             var cardAreaForCharacter = new SKRect(region.Left, region.Top, region.Right, region.Bottom - amountToLeaveForSubtitles);
        
-            DrawTextCenteredInsideRect(cardAreaForCharacter, chineseCardSpec.chineseCharacter, _chineseFont, canvas);                        
+            DrawTextVisuallyCenteredInsideRect(cardAreaForCharacter, chineseCardSpec.chineseCharacter, _boldTypeFace,0, canvas);
 
-            //canvas.DrawText(chineseCardSpec.chineseCharacter, coordForTextOrigin, paint);
+            var cardAreaForPinyin = new SKRect(cardAreaForCharacter.Left, cardAreaForCharacter.Bottom, cardAreaForCharacter.Right, cardAreaForCharacter.Bottom + (region.Height - cardAreaForCharacter.Height));
+
+            DrawTextVisuallyCenteredInsideRect(cardAreaForPinyin, PadTextTo(20,chineseCardSpec.pinyin), _regularTypeFace, 0.15f, canvas);
 
             var rectPaint = new SKPaint()
             {
-                Color = SKColors.Black,
+                Color = SKColors.Red,
                 StrokeWidth = 5,
                 Style = SKPaintStyle.Stroke
             };
 
-            //canvas.DrawRect(region,rectPaint);
+            
+            //canvas.DrawRect(cardAreaForPinyin,rectPaint);
             //canvas.DrawRect(cardAreaForCharacter, rectPaint);
                 
         }
