@@ -1,7 +1,7 @@
 # Memory Card Game Generator
 
 Objectives:
-* Learn how to do a Blazor WebAssembly website using C#
+* Learn how to do a Blazor Server website using C#
 * Learn how to do 2D drawing using F# and Skiasharp
 * Help school
 * Help kid learn 
