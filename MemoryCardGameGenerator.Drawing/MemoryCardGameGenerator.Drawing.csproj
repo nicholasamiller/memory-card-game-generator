@@ -9,10 +9,15 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
     <PackageReference Include="SkiaSharp" Version="2.88.0-preview.61" />
+    <PackageReference Include="Topten.RichTextKit" Version="0.4.141" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Fonts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>

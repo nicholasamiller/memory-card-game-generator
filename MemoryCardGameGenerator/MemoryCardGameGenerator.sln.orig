@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+<<<<<<< HEAD
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Drawing", "..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj", "{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Tests", "..\MemoryCardGameGenerator.Tests\MemoryCardGameGenerator.Tests.csproj", "{586FFAF5-A74A-4928-A750-F873ABF3024C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryCardGameGenerator", "MemoryCardGameGenerator.csproj", "{DCDF3511-6192-40E2-B1BA-D670EE8359A3}"
+=======
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator", "MemoryCardGameGenerator.csproj", "{E77C65C6-EC5E-4CA0-A7EA-AA4842F2B1E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Drawing", "..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj", "{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Tests", "..\MemoryCardGameGenerator.Tests\MemoryCardGameGenerator.Tests.csproj", "{586FFAF5-A74A-4928-A750-F873ABF3024C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryCardGameGenerator.Model", "..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj", "{63C5682E-11FF-436D-B2E1-231B5DEAFBC0}"
+>>>>>>> bd7d3e2f3e510120fa2d3ad3992a1c3d8f8c3c8f
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586FFAF5-A74A-4928-A750-F873ABF3024C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586FFAF5-A74A-4928-A750-F873ABF3024C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586FFAF5-A74A-4928-A750-F873ABF3024C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586FFAF5-A74A-4928-A750-F873ABF3024C}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
+		{DCDF3511-6192-40E2-B1BA-D670EE8359A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCDF3511-6192-40E2-B1BA-D670EE8359A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCDF3511-6192-40E2-B1BA-D670EE8359A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCDF3511-6192-40E2-B1BA-D670EE8359A3}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{63C5682E-11FF-436D-B2E1-231B5DEAFBC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63C5682E-11FF-436D-B2E1-231B5DEAFBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63C5682E-11FF-436D-B2E1-231B5DEAFBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63C5682E-11FF-436D-B2E1-231B5DEAFBC0}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> bd7d3e2f3e510120fa2d3ad3992a1c3d8f8c3c8f
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D6E4D4C-4CCF-42BF-B094-D79546EA5957}
+	EndGlobalSection
+EndGlobal

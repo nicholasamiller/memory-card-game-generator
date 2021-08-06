@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
+    <PackageReference Include="coverlet.collector" Version="3.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj" />
+<<<<<<< HEAD
+=======
+    <ProjectReference Include="..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj" />
+    <ProjectReference Include="..\MemoryCardGameGenerator\MemoryCardGameGenerator.csproj" />
+>>>>>>> bd7d3e2f3e510120fa2d3ad3992a1c3d8f8c3c8f
+  </ItemGroup>
+
+</Project>

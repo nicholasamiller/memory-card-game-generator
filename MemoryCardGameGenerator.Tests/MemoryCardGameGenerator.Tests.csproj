@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj" />
+    <ProjectReference Include="..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj" />
   </ItemGroup>
 
 </Project>

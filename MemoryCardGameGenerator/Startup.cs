@@ -44,7 +44,7 @@ namespace MemoryCardGameGenerator
             //});
 
             services.AddRazorPages();
-            services.AddServerSideBlazor()
+            services.AddServerSideBlazor();
            //     .AddMicrosoftIdentityConsentHandler();
             services.AddSingleton<WeatherForecastService>();
         }
