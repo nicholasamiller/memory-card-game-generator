@@ -81,7 +81,9 @@ namespace MemoryCardGameGenerator.Drawing
             return text.PadLeft(totalWidth / 2).PadRight(totalWidth / 2);
         }
 
-     
+        Func<string, List<string>> splitToLines = s => s.Split(',').Select(l => l.Trim()).ToList();
+
+
         private void DrawTextVisuallyCenteredInsideRect(SKRect rect, string text, SKTypeface sKTypeface, float upwardsOffsetProportion, SKCanvas canvas)
         {
             var paddingPropertion = 0.5f;
@@ -92,15 +94,15 @@ namespace MemoryCardGameGenerator.Drawing
                 Style = SKPaintStyle.Fill,
                 Typeface = sKTypeface
             };
-            
-            
-            
-            var initialTextWidth = paint.MeasureText(text);
+
+            // width of longest line
+            var initialTextWidth = splitToLines(text).Max(l => paint.MeasureText(l));
             paint.TextSize = paint.TextSize / initialTextWidth * rect.Width * paddingPropertion;
 
             SKRect textBounds = new SKRect();
             paint.MeasureText(text, ref textBounds);
         
+
             // measure longest line
             // set font size based on that
             // create rectangles for each line
