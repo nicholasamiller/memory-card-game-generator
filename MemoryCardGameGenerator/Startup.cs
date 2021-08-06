@@ -45,7 +45,7 @@ namespace MemoryCardGameGenerator
 
             services.AddRazorPages();
             services.AddServerSideBlazor()
-                .AddMicrosoftIdentityConsentHandler();
+           //     .AddMicrosoftIdentityConsentHandler();
             services.AddSingleton<WeatherForecastService>();
         }
 
@@ -68,8 +68,8 @@ namespace MemoryCardGameGenerator
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
