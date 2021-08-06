@@ -1,4 +1,5 @@
 ﻿using MemoryCardGameGenerator.Drawing;
+using MemoryCardGameGenerator.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
@@ -9,6 +10,7 @@ using SixLabors.ImageSharp.Processing;
 using SkiaSharp;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace MemoryCardGameGenerator.Tests
 {
@@ -33,10 +35,26 @@ namespace MemoryCardGameGenerator.Tests
 
 
         [TestMethod]
-        public void TestMethod1()
+        public void TestLoadDataFromText()
         {
+            var r = CardsData.LoadSpecsFromResources().ToList();
+        }
 
+        [TestMethod]
+        public void TestWithRealData()
+        {
+            var specs = CardsData.LoadSpecsFromResources().ToList();
+            var ut = new Grid(4, 5);
+            var first20Specs = specs.Skip(20);
+            foreach (var s in first20Specs)
+            {
+                ut.AddCard(s);
+            }
 
+            using (var stream = File.OpenWrite("skOutput2.png"))
+            {
+                ut.RenderToPng(stream);
+            }
 
         }
 

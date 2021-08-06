@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using MemoryCardGameGenerator.Model;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing;
@@ -10,13 +11,12 @@ using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SkiaSharp;
+using Topten.RichTextKit;
 using Path = SixLabors.ImageSharp.Drawing.Path;
 
 namespace MemoryCardGameGenerator.Drawing
 {
-    public record CardPairSpec(ChineseCardSpec ChineseCardSpec, EnglishCardSpec EnglishCardSpec);
-    public record ChineseCardSpec(string chineseCharacter, string pinyin);
-    public record EnglishCardSpec(string englishWord);
+   
 
     public class Grid
     {
@@ -81,6 +81,7 @@ namespace MemoryCardGameGenerator.Drawing
             return text.PadLeft(totalWidth / 2).PadRight(totalWidth / 2);
         }
 
+     
         private void DrawTextVisuallyCenteredInsideRect(SKRect rect, string text, SKTypeface sKTypeface, float upwardsOffsetProportion, SKCanvas canvas)
         {
             var paddingPropertion = 0.5f;
@@ -91,18 +92,32 @@ namespace MemoryCardGameGenerator.Drawing
                 Style = SKPaintStyle.Fill,
                 Typeface = sKTypeface
             };
-
+            
+            
+            
             var initialTextWidth = paint.MeasureText(text);
             paint.TextSize = paint.TextSize / initialTextWidth * rect.Width * paddingPropertion;
 
             SKRect textBounds = new SKRect();
             paint.MeasureText(text, ref textBounds);
         
+            // measure longest line
+            // set font size based on that
+            // create rectangles for each line
+            // space them with fixed line spacing
+            // 
+            
+
+
             var centerOfText = new SKPoint(rect.Left +  rect.Width / 2 - textBounds.MidX, rect.Top +  (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textBounds.MidY);
+                      
             canvas.DrawText(text, centerOfText, paint);
         }
-                
 
+        private void DrawEnglishCard(SKRect region, EnglishCardSpec englishCardSpec, SKCanvas canvas)
+        {
+            DrawTextVisuallyCenteredInsideRect(region, englishCardSpec.englishWord, _regularTypeFace,0.05f, canvas);
+        }
         private void DrawChineseCard(SKRect region, ChineseCardSpec chineseCardSpec, SKCanvas canvas)
         {
             float amountToLeaveForSubtitles = region.Height * 1 / 4;
@@ -139,9 +154,11 @@ namespace MemoryCardGameGenerator.Drawing
                 
                 while (_cardRegions.Any() && _cards.Any())
                 {
-                    var region = _cardRegions.Dequeue();
                     var card = _cards.Dequeue();
-                    DrawChineseCard(region, card.ChineseCardSpec, canvas);
+                    var chineseCardRegion = _cardRegions.Dequeue();
+                    DrawChineseCard(chineseCardRegion, card.ChineseCardSpec, canvas);
+                    var englishCardRegion = _cardRegions.Dequeue();
+                    DrawEnglishCard(englishCardRegion, card.EnglishCardSpec, canvas);
                 }
 
 
@@ -215,39 +232,6 @@ namespace MemoryCardGameGenerator.Drawing
             return drawChar; 
         }
              
-        //public static Image BuildPage(IEnumerable<CardPairSpec> cardPairs)
-        //{
-        //    var cardsPerRow = 3;
-        //    var cardsPerColumn = 4;
-        //    var horizontalBleed = (PAGE_WIDTH - PAGE_WIDTH_BLED) / 2;
-        //    var verticalBleed = (PAGE_HEIGHT - PAGE_HEIGHT_BLED) / 2;
-        //    var area = new Rectangle(new Point(horizontalBleed, verticalBleed), new Size(PAGE_WIDTH_BLED, PAGE_HEIGHT_BLED));
-        //    var cardSize = PAGE_WIDTH_BLED / cardsPerRow;
-        //    var startPoints =
-        //        from r in Enumerable.Range(0,cardsPerRow)
-        //        from c in Enumerable.Range(0,cardsPerColumn)
-        //        let topLeft = new Point(area.Left + r * cardSize, area.Top + c * cardSize)
-        //        select topLeft;
-        //    var cardRectangles = startPoints.Select(sp => new Rectangle(sp, new Size(cardSize, cardSize)));
-
-        //    var firstChineseCardAction = DrawChineseCard(cardPairs.First().ChineseCardSpec, cardRectangles.ElementAt(3));
-                       
-        //    var gridActions = BuildGridActions(cardsPerRow,cardsPerColumn, area);
-        //    var image = new Image<Bgr24>(PAGE_WIDTH, PAGE_HEIGHT);
-
-        //    image.Mutate(x => x.Clear(Color.White));
-        //    image.Mutate(firstChineseCardAction);
-        //    foreach(var ga in gridActions)
-        //    {
-        //        image.Mutate(ga);
-        //    }
-        //    return image;
-
-        //}
-        
-
-        
-              
 
         
         
