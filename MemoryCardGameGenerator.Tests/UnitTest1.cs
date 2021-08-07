@@ -80,12 +80,22 @@ namespace MemoryCardGameGenerator.Tests
             {
                 image.Save(output, new PngEncoder());
             }
-
-
-
-
-
         }
 
+        [TestMethod]
+        public void TestLineSpacing()
+        {
+            var numberOfLines = 3;
+            var boundingBoxWidth = 200;
+            var boundingBoxHeight = 60;
+            var lineSpacing = 20;
+            var expectedSpace = (numberOfLines - 1) * lineSpacing;
+            
+            var boundingBox = SKRect.Create(new SKPoint(0, 0), new SKSize(boundingBoxWidth, boundingBoxHeight));
+            var result = CardDrawingFunctions.GetLineRects(boundingBox, numberOfLines, lineSpacing);
+            Assert.IsTrue(result.Count() == 3);
+            var actualSpace = boundingBoxHeight - result.Sum(r => r.Height);
+            Assert.IsTrue(expectedSpace == actualSpace);
+        }
     }
 }
