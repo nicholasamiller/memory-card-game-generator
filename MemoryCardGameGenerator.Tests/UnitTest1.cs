@@ -8,7 +8,6 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SkiaSharp;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -17,9 +16,19 @@ namespace MemoryCardGameGenerator.Tests
     [TestClass]
     public class UnitTest1
     {
+        
+        private Stream GetTestOutputDirectoryStream(string fileName)
+        {
+            var testOutputDir = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "GeneratedTestImages"));
+            if (!testOutputDir.Exists)
+                testOutputDir.Create();
+            return File.OpenWrite(Path.Combine(testOutputDir.FullName, fileName));
+        }
+        
         [TestMethod]
         public void TestSkiaSharpGridDraw()
         {
+                       
             var ut = new Grid(4, 5);
             var spec = new CardPairSpec(new ChineseCardSpec("二", "èr"), new EnglishCardSpec("Two"));
             ut.AddCard(spec);
@@ -27,7 +36,7 @@ namespace MemoryCardGameGenerator.Tests
             ut.AddCard(spec2);
             var spec3 = new CardPairSpec(new ChineseCardSpec("人", "ren"), new EnglishCardSpec("person"));
             ut.AddCard(spec3);
-            using (var stream = File.OpenWrite("skOutput2.png"))
+            using (var stream = GetTestOutputDirectoryStream("skOutput2.png"))
             {
                 ut.RenderToPng(stream);
             }
@@ -51,7 +60,7 @@ namespace MemoryCardGameGenerator.Tests
                 ut.AddCard(s);
             }
 
-            using (var stream = File.OpenWrite("skOutput2.png"))
+            using (var stream = GetTestOutputDirectoryStream("skOutput2.png"))
             {
                 ut.RenderToPng(stream);
             }
@@ -76,7 +85,7 @@ namespace MemoryCardGameGenerator.Tests
             var font = fonts.CreateFont("Microsoft YaHei", 36, FontStyle.Bold);
             var image = new Image<Bgr24>(200, 200);
             image.Mutate(i => i.DrawText("hello", font, Color.Red, new Point(0, 0)));
-            using (var output = new FileStream("testFont.png", FileMode.Create, FileAccess.ReadWrite))
+            using (var output = GetTestOutputDirectoryStream("testFont.png"))
             {
                 image.Save(output, new PngEncoder());
             }

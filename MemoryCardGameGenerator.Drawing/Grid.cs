@@ -21,7 +21,7 @@ namespace MemoryCardGameGenerator.Drawing
         private SKTypeface _boldTypeFace;
         private SKTypeface _regularTypeFace;
         private readonly SKTypeface _lightTypeFace;
-        
+
         public Grid(int cardsPerRow, int cardsPerColumn)
         {
 
@@ -31,7 +31,7 @@ namespace MemoryCardGameGenerator.Drawing
             _gridArea = new SKRect(horizontalBleed, verticalBleed, PAGE_WIDTH_BLED, PAGE_HEIGHT_BLED);
             _cardsPerRow = cardsPerRow;
             _cardsPerColumn = cardsPerColumn;
-            
+
             _cardRegions = new Queue<SKRect>(GetCardRegions(_gridArea));
 
             using (var ms = new MemoryStream(Properties.Resources.msyhbd))
@@ -43,7 +43,7 @@ namespace MemoryCardGameGenerator.Drawing
             {
                 _regularTypeFace = SKTypeface.FromStream(ms);
             }
-            
+
             using (var ms = new MemoryStream(Properties.Resources.msyhl))
             {
                 _lightTypeFace = SKTypeface.FromStream(ms);
@@ -58,7 +58,7 @@ namespace MemoryCardGameGenerator.Drawing
         {
             _cards.Enqueue(cardPairSpec);
         }
-        
+
         private string PadTextTo(int totalWidth, string text)
         {
             var textLength = text.Length;
@@ -72,7 +72,19 @@ namespace MemoryCardGameGenerator.Drawing
 
         Func<string, List<string>> splitToLines = s => s.Split(',').Select(l => l.Trim()).ToList();
 
-         
+        
+        private record TextBoxResult(SKRect rect, float textSize);
+        private TextBoxResult sizeTextForPaddedRect(string text, SKPaint paint, SKRect boundingBox, float paddingProportion)
+        {
+            
+            var initialWidth = paint.MeasureText(text);
+            var textSize = paint.TextSize / initialWidth * boundingBox.Width * paddingProportion;
+            SKRect textBounds = new SKRect();
+            paint.MeasureText(text, ref textBounds);
+            return new TextBoxResult(textBounds, textSize);
+        }
+
+               
 
 
         private void DrawTextVisuallyCenteredInsideRect(SKRect rect, string text, SKTypeface sKTypeface, float upwardsOffsetProportion, SKCanvas canvas)
@@ -86,26 +98,12 @@ namespace MemoryCardGameGenerator.Drawing
                 Typeface = sKTypeface
             };
 
-            // width of longest line
-            var initialTextWidth = splitToLines(text).Max(l => paint.MeasureText(l));
-            paint.TextSize = paint.TextSize / initialTextWidth * rect.Width * paddingPropertion;
+            var textSizeInfo = sizeTextForPaddedRect(text, paint, rect, paddingPropertion);
+            paint.TextSize = textSizeInfo.textSize;
 
-            SKRect textBounds = new SKRect();
-            paint.MeasureText(text, ref textBounds);
-        
-
-            // measure longest line - done
-            // set font size based on that - done
-            // create rectangles for each line - 
-            // set the space between them based on the height of the longest line
-            // create a new rectangle based on those dimensions
-            // 
-            
-
-
-            var centerOfText = new SKPoint(rect.Left +  rect.Width / 2 - textBounds.MidX, rect.Top +  (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textBounds.MidY);
+            var topLeftPointToGetTextCentred = new SKPoint(rect.Left +  rect.Width / 2 - textSizeInfo.rect.MidX, rect.Top +  (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textSizeInfo.rect.MidY);
                       
-            canvas.DrawText(text, centerOfText, paint);
+            canvas.DrawText(text, topLeftPointToGetTextCentred, paint);
         }
 
         private void DrawEnglishCard(SKRect region, EnglishCardSpec englishCardSpec, SKCanvas canvas)
