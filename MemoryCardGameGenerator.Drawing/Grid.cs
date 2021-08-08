@@ -73,15 +73,17 @@ namespace MemoryCardGameGenerator.Drawing
         Func<string, List<string>> splitToLines = s => s.Split(',').Select(l => l.Trim()).ToList();
 
         
-        private record TextBoxResult(SKRect rect, float textSize);
+        private record TextBoxResult(SKRect rect, SKPaint paintToUse);
         private TextBoxResult sizeTextForPaddedRect(string text, SKPaint paint, SKRect boundingBox, float paddingProportion)
         {
             
             var initialWidth = paint.MeasureText(text);
             var textSize = paint.TextSize / initialWidth * boundingBox.Width * paddingProportion;
+            var newPaint = paint.Clone();
+            newPaint.TextSize = textSize;
             SKRect textBounds = new SKRect();
-            paint.MeasureText(text, ref textBounds);
-            return new TextBoxResult(textBounds, textSize);
+            newPaint.MeasureText(text, ref textBounds);
+            return new TextBoxResult(textBounds, newPaint);
         }
 
                
@@ -90,7 +92,7 @@ namespace MemoryCardGameGenerator.Drawing
         private void DrawTextVisuallyCenteredInsideRect(SKRect rect, string text, SKTypeface sKTypeface, float upwardsOffsetProportion, SKCanvas canvas)
         {
             var paddingPropertion = 0.5f;
-            var paint = new SKPaint
+            var initialPaint = new SKPaint
             {
                 Color = SKColors.Black,
                 IsAntialias = true,
@@ -98,12 +100,11 @@ namespace MemoryCardGameGenerator.Drawing
                 Typeface = sKTypeface
             };
 
-            var textSizeInfo = sizeTextForPaddedRect(text, paint, rect, paddingPropertion);
-            paint.TextSize = textSizeInfo.textSize;
-
+            var textSizeInfo = sizeTextForPaddedRect(text, initialPaint, rect, paddingPropertion);
+       
             var topLeftPointToGetTextCentred = new SKPoint(rect.Left +  rect.Width / 2 - textSizeInfo.rect.MidX, rect.Top +  (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textSizeInfo.rect.MidY);
                       
-            canvas.DrawText(text, topLeftPointToGetTextCentred, paint);
+            canvas.DrawText(text, topLeftPointToGetTextCentred, textSizeInfo.paintToUse);
         }
 
         private void DrawEnglishCard(SKRect region, EnglishCardSpec englishCardSpec, SKCanvas canvas)
