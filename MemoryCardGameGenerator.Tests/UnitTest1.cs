@@ -29,16 +29,17 @@ namespace MemoryCardGameGenerator.Tests
         public void TestSkiaSharpGridDraw()
         {
                        
-            var ut = new Grid(4, 5);
+            var ut = new PagePair(4, 5);
             var spec = new CardPairSpec(new ChineseCardSpec("二", "èr"), new EnglishCardSpec("Two"));
             ut.AddCard(spec);
             var spec2 = new CardPairSpec(new ChineseCardSpec("一", "yi"), new EnglishCardSpec("One"));
             ut.AddCard(spec2);
             var spec3 = new CardPairSpec(new ChineseCardSpec("人", "ren"), new EnglishCardSpec("person"));
             ut.AddCard(spec3);
-            using (var stream = GetTestOutputDirectoryStream("skOutput2.png"))
+            using (var streamFront = GetTestOutputDirectoryStream("frontPage.png"))
+            using (var streamBack = GetTestOutputDirectoryStream("backPage.png"))
             {
-                ut.RenderToPng(stream);
+                ut.RenderToPng(streamFront, streamBack);
             }
         }
 
@@ -53,16 +54,16 @@ namespace MemoryCardGameGenerator.Tests
         public void TestWithRealData()
         {
             var specs = CardsData.LoadSpecsFromResources().ToList();
-            var ut = new Grid(4, 5);
-            var first20Specs = specs.Skip(20);
+            var ut = new PagePair(4, 5);
+            var first20Specs = specs.Take(20);
             foreach (var s in first20Specs)
             {
                 ut.AddCard(s);
             }
-
-            using (var stream = GetTestOutputDirectoryStream("skOutput2.png"))
+            using (var streamFront = GetTestOutputDirectoryStream("frontPage.png"))
+            using (var streamBack = GetTestOutputDirectoryStream("backPage.png"))
             {
-                ut.RenderToPng(stream);
+                ut.RenderToPng(streamFront,streamBack);
             }
 
         }
@@ -105,6 +106,32 @@ namespace MemoryCardGameGenerator.Tests
             Assert.IsTrue(result.Count() == 3);
             var actualSpace = boundingBoxHeight - result.Sum(r => r.Height);
             Assert.IsTrue(expectedSpace == actualSpace);
+        }
+
+        [TestMethod]
+        public void TestLineSpacingForSingleLine()
+        {
+            var numberOfLines = 1;
+            var boundingBoxWidth = 200;
+            var boundingBoxHeight = 60;
+            var lineSpacing = 20;
+            var expectedSpace = (numberOfLines - 1) * lineSpacing;
+
+            var boundingBox = SKRect.Create(new SKPoint(0, 0), new SKSize(boundingBoxWidth, boundingBoxHeight));
+            var result = CardDrawingFunctions.GetLineRects(boundingBox, numberOfLines, lineSpacing);
+            Assert.IsTrue(result.Count() == 1);
+            var actualSpace = boundingBoxHeight - result.Sum(r => r.Height);
+            Assert.IsTrue(expectedSpace == actualSpace);
+            Assert.IsTrue(boundingBox == result.First());
+        }
+
+        [TestMethod]
+        public void TestLineSplit()
+        {
+            var test = " mountain, hill";
+            var result = PagePair.splitToLines(test);
+            Assert.IsTrue(result[0] == "mountain,");
+            Assert.IsTrue(result[1] == "hill");
         }
     }
 }

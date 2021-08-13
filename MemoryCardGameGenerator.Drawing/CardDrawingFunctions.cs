@@ -37,6 +37,7 @@ namespace MemoryCardGameGenerator.Drawing
                 currentTopLeft.Y = currentTopLeft.Y + lineRect.Height + lineSpacing;
                 acc.Add(lineRect);
             }
+            acc.Reverse();
             return acc;
         }
 
