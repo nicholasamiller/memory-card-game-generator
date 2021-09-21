@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Drawing", "..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj", "{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Drawing", "MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj", "{C348A7A5-FD8B-4619-B3B8-26A1A121D90E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Tests", "..\MemoryCardGameGenerator.Tests\MemoryCardGameGenerator.Tests.csproj", "{586FFAF5-A74A-4928-A750-F873ABF3024C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Tests", "MemoryCardGameGenerator.Tests\MemoryCardGameGenerator.Tests.csproj", "{586FFAF5-A74A-4928-A750-F873ABF3024C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Model", "..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj", "{054BD4E3-7C6A-41F3-94DB-DC4F975AB75D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Model", "MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj", "{054BD4E3-7C6A-41F3-94DB-DC4F975AB75D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "..\Client\Client.csproj", "{33719DBD-8A3E-4C9B-B2D9-22E8CE566CBC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{33719DBD-8A3E-4C9B-B2D9-22E8CE566CBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "..\Api\Api.csproj", "{F37C005F-3EBD-436A-8058-BD6C38B8BFED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{F37C005F-3EBD-436A-8058-BD6C38B8BFED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
