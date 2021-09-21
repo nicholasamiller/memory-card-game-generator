@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryCardGameGenerator.Model", "MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj", "{054BD4E3-7C6A-41F3-94DB-DC4F975AB75D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{33719DBD-8A3E-4C9B-B2D9-22E8CE566CBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{33719DBD-8A3E-4C9B-B2D9-22E8CE566CBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{F37C005F-3EBD-436A-8058-BD6C38B8BFED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{F37C005F-3EBD-436A-8058-BD6C38B8BFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{477E5687-2904-46D3-869E-54D4B52BC42F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{F37C005F-3EBD-436A-8058-BD6C38B8BFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F37C005F-3EBD-436A-8058-BD6C38B8BFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F37C005F-3EBD-436A-8058-BD6C38B8BFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{477E5687-2904-46D3-869E-54D4B52BC42F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{477E5687-2904-46D3-869E-54D4B52BC42F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{477E5687-2904-46D3-869E-54D4B52BC42F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{477E5687-2904-46D3-869E-54D4B52BC42F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
