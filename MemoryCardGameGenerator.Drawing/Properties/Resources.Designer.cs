@@ -22,7 +22,7 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MemoryCardGameGenerator.Drawing.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] msyh {
+        public static byte[] msyh {
             get {
                 object obj = ResourceManager.GetObject("msyh", resourceCulture);
                 return ((byte[])(obj));
@@ -73,7 +73,7 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] msyhbd {
+        public static byte[] msyhbd {
             get {
                 object obj = ResourceManager.GetObject("msyhbd", resourceCulture);
                 return ((byte[])(obj));
@@ -83,7 +83,7 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] msyhl {
+        public static byte[] msyhl {
             get {
                 object obj = ResourceManager.GetObject("msyhl", resourceCulture);
                 return ((byte[])(obj));

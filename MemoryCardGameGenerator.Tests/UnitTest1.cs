@@ -25,23 +25,23 @@ namespace MemoryCardGameGenerator.Tests
             return File.OpenWrite(Path.Combine(testOutputDir.FullName, fileName));
         }
         
-        [TestMethod]
-        public void TestSkiaSharpGridDraw()
-        {
+        //[TestMethod]
+        //public void TestSkiaSharpGridDraw()
+        //{
                        
-            var ut = new PagePair(4, 5);
-            var spec = new CardPairSpec(new ChineseCardSpec("二", "èr"), new EnglishCardSpec("Two"));
-            ut.AddCard(spec);
-            var spec2 = new CardPairSpec(new ChineseCardSpec("一", "yi"), new EnglishCardSpec("One"));
-            ut.AddCard(spec2);
-            var spec3 = new CardPairSpec(new ChineseCardSpec("人", "ren"), new EnglishCardSpec("person"));
-            ut.AddCard(spec3);
-            using (var streamFront = GetTestOutputDirectoryStream("frontPage.png"))
-            using (var streamBack = GetTestOutputDirectoryStream("backPage.png"))
-            {
-                ut.RenderToPng(streamFront, streamBack);
-            }
-        }
+        //    var ut = new PagePair(4, 5);
+        //    var spec = new CardPairSpec(new ChineseCardSpec("二", "èr"), new EnglishCardSpec("Two"));
+        //    ut.AddCard(spec);
+        //    var spec2 = new CardPairSpec(new ChineseCardSpec("一", "yi"), new EnglishCardSpec("One"));
+        //    ut.AddCard(spec2);
+        //    var spec3 = new CardPairSpec(new ChineseCardSpec("人", "ren"), new EnglishCardSpec("person"));
+        //    ut.AddCard(spec3);
+        //    using (var streamFront = GetTestOutputDirectoryStream("frontPage.png"))
+        //    using (var streamBack = GetTestOutputDirectoryStream("backPage.png"))
+        //    {
+        //        ut.RenderToPng(streamFront, streamBack);
+        //    }
+        //}
 
 
         [TestMethod]
@@ -50,23 +50,22 @@ namespace MemoryCardGameGenerator.Tests
             var r = CardsData.LoadSpecsFromResources().ToList();
         }
 
-        [TestMethod]
-        public void TestWithRealData()
-        {
-            var specs = CardsData.LoadSpecsFromResources().ToList();
-            var ut = new PagePair(4, 5);
-            var first20Specs = specs.Take(20);
-            foreach (var s in first20Specs)
-            {
-                ut.AddCard(s);
-            }
-            using (var streamFront = GetTestOutputDirectoryStream("frontPage.png"))
-            using (var streamBack = GetTestOutputDirectoryStream("backPage.png"))
-            {
-                ut.RenderToPng(streamFront,streamBack);
-            }
-
-        }
+        //[TestMethod]
+        //public void TestWithRealData()
+        //{
+        //    var specs = CardsData.LoadSpecsFromResources().ToList();
+        //    var ut = new PagePair(4, 5);
+        //    var first20Specs = specs.Take(20);
+        //    foreach (var s in first20Specs)
+        //    {
+        //        ut.AddCard(s);
+        //    }
+        //    using (var streamFront = GetTestOutputDirectoryStream("frontPage.png"))
+        //    using (var streamBack = GetTestOutputDirectoryStream("backPage.png"))
+        //    {
+        //        ut.RenderToPng(streamFront,streamBack);
+        //    }
+        //}
 
         [TestMethod]
         public void TestFontLoad()
@@ -123,6 +122,22 @@ namespace MemoryCardGameGenerator.Tests
             var actualSpace = boundingBoxHeight - result.Sum(r => r.Height);
             Assert.IsTrue(expectedSpace == actualSpace);
             Assert.IsTrue(boundingBox == result.First());
+        }
+
+        [TestMethod]
+        public void TestPdfGen()
+        {
+            using (var bt = new MemoryStream(Drawing.Properties.Resources.msyhbd))
+            using (var rt = new MemoryStream(Drawing.Properties.Resources.msyh))
+            using (var lt = new MemoryStream(Drawing.Properties.Resources.msyhl))
+            using (var pdfOutput = GetTestOutputDirectoryStream("Lockdown KMIP Game.pdf"))
+            {
+                var typeFaces = new TypeFacesConfig(SKTypeface.FromStream(rt), SKTypeface.FromStream(bt), SKTypeface.FromStream(lt));
+                var specs = CardsData.LoadSpecsFromResources().ToList();
+                var ut = new PdfCardsDocument(specs, 4,typeFaces);
+                ut.Render(pdfOutput);
+            }
+            
         }
 
         [TestMethod]
