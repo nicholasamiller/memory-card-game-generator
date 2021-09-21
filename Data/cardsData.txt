@@ -30,5 +30,14 @@
 云 (yún) cloud
 目 (mù) eye
 田 (tián) rice field
-
-
+三角形 (sān jiǎo xíng) triangle
+圆形 (yuán xíng) circle
+方形 (fāng xíng) square
+两个 (liǎng gè) a couple
+天气 （tián qī) weather
+下雪 (xià xuě) snowing
+下雨 (xià yǔ) raining
+晴朗 (qíng lǎng) sunny
+多云 (duō yún) cloudy
+太热了 (tài rè le) too hot
+太冷了 (tài lěng le) too cold
