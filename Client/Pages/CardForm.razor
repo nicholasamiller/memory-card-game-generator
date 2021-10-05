@@ -1,0 +1,27 @@
+﻿@page "/cards"
+@using Client.CardEditing
+@using MemoryCardGenerator.Shared;
+
+<h3>CardForm</h3>
+
+@*
+Component for card data form - a table
+Component can get filled from API later
+Component for list of card items
+Can search table
+When saving an entry
+Fire event on set
+Add to an injected repository
+Save Spec - in json
+Upload Spec - in json
+*@
+
+
+<CardComponent CardDataDto="@dummyData"></CardComponent>
+
+
+@code {
+	private CardDataDto dummyData = new CardDataDto() {Chinese = "chinese", English = "english", Pinyin = "pinyin"};
+	
+
+}

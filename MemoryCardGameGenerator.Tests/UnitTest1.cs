@@ -8,6 +8,7 @@ using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SkiaSharp;
+using System;
 using System.IO;
 using System.Linq;
 
@@ -44,11 +45,6 @@ namespace MemoryCardGameGenerator.Tests
         //}
 
 
-        [TestMethod]
-        public void TestLoadDataFromText()
-        {
-            var r = CardsData.LoadSpecsFromResources().ToList();
-        }
 
         //[TestMethod]
         //public void TestWithRealData()
@@ -127,13 +123,61 @@ namespace MemoryCardGameGenerator.Tests
         [TestMethod]
         public void TestPdfGen()
         {
+            var testCardsData = @"一 (yì) one
+二(èr) two
+三(sān) three
+人(rén) a person, human
+大(dà) big
+小(xiǎo) small
+个(gè) measuring word
+天(tiān) sky, days
+上(shàng) up, top
+下(xià) down, bottom
+四(sì) four
+五(wǔ) five
+六(liù) six
+七(qī) seven
+八(bā) eight
+九(jiǔ) nine
+十(shi) ten
+口(kǒu) mouth
+日(ri) sun, day
+中(zhōng) middle
+长(cháng) long
+手(shŏu) hand
+山(shān) mountain, hill
+木(mù) wood, tree
+水(shuǐ) water
+火(huǒ) fire
+土(tǔ) soil
+石(shí) rock, stone
+月(yuè) moon, month
+云(yún) cloud
+目(mù) eye
+田(tián) rice field
+三角形(sān jiǎo xíng) triangle
+圆形(yuán xíng) circle
+方形(fāng xíng) square
+两个(liǎng gè) a couple
+天气(tián qī) weather
+下雪(xià xuě) snowing
+下雨(xià yǔ) raining
+晴朗(qíng lǎng) sunny
+多云(duō yún) cloudy
+太热了(tài rè le) too hot
+太冷了(tài lěng le) too cold";
+
+
             using (var bt = new MemoryStream(Drawing.Properties.Resources.msyhbd))
             using (var rt = new MemoryStream(Drawing.Properties.Resources.msyh))
             using (var lt = new MemoryStream(Drawing.Properties.Resources.msyhl))
+            
+                    
+
             using (var pdfOutput = GetTestOutputDirectoryStream("Lockdown KMIP Game.pdf"))
             {
                 var typeFaces = new TypeFacesConfig(SKTypeface.FromStream(rt), SKTypeface.FromStream(bt), SKTypeface.FromStream(lt));
-                var specs = CardsData.LoadSpecsFromResources().ToList();
+                var specs = CardsData.LoadSpecsFromString(testCardsData);
                 var ut = new PdfCardsDocument(specs, 4,typeFaces);
                 ut.Render(pdfOutput);
             }

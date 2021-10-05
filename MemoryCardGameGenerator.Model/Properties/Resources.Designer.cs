@@ -19,7 +19,7 @@ namespace MemoryCardGameGenerator.Model.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,55 +57,6 @@ namespace MemoryCardGameGenerator.Model.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 一 (yì) one
-        ///二 (èr) two
-        ///三 (sān) three
-        ///人 (rén) a person, human
-        ///大 (dà) big
-        ///小 (xiǎo) small
-        ///个 (gè) measuring word
-        ///天 (tiān) sky, days
-        ///上 (shàng) up, top
-        ///下 (xià) down, bottom
-        ///四 (sì) four
-        ///五 (wǔ) five
-        ///六 (liù) six
-        ///七 (qī) seven
-        ///八 (bā) eight
-        ///九 (jiǔ) nine
-        ///十 (shi) ten 
-        ///口 (kǒu) mouth
-        ///日 (ri) sun, day
-        ///中 (zhōng) middle
-        ///长 (cháng) long
-        ///手 (shŏu) hand
-        ///山 (shān) mountain, hill
-        ///木 (mù) wood, tree
-        ///水 (shuǐ) water
-        ///火 (huǒ) fire
-        ///土 (tǔ) soil
-        ///石 (shí) rock, stone
-        ///月 (yuè) moon, month
-        ///云 (yún) cloud
-        ///目 (mù) eye
-        ///田 (t [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string cardsData {
-            get {
-                return ResourceManager.GetString("cardsData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }
