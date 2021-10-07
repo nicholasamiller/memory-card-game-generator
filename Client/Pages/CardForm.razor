@@ -1,8 +1,7 @@
 ﻿@page "/cards"
 @using Client.CardEditing
 @using MemoryCardGenerator.Shared;
-
-<h3>CardForm</h3>
+@inject ICardRepository CardRepository;
 
 @*
 Component for card data form - a table
@@ -17,11 +16,32 @@ Upload Spec - in json
 *@
 
 
-<CardComponent CardDataDto="@dummyData"></CardComponent>
+<table class="table">
+	<thead>
+		<tr>
+		  <th scope="col">Character</th>
+	      <th scope="col">Pinyin</th>
+		  <th scope="col">English</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var card in CardRepository.GetAllCards())
+		{
+			<tr>
+				<td>@card.Chinese</td>
+				<td>@card.Pinyin</td>
+				<td>@card.English</td>
+			</tr>
+		}
+	</tbody>
+
+
+</table>
+
+
 
 
 @code {
-	private CardDataDto dummyData = new CardDataDto() {Chinese = "chinese", English = "english", Pinyin = "pinyin"};
 	
 
 }

@@ -1,7 +1,7 @@
 ﻿@using MemoryCardGenerator.Shared;
 
 <EditForm Model="@_card" OnValidSubmit="@HandleValidSubmit">
-	<InputText @bind-Value="_card.Chinese"></InputText>
+	<InputText class="form-control" @bind-Value="_card.Chinese"></InputText>
 	<InputText @bind-Value="_card.Pinyin"></InputText>
 	<InputText @bind-Value="_card.English"></InputText>
 	<button type="submit">Submit</button>
