@@ -77,7 +77,7 @@ namespace Api
 
         private class TranslationRequestInfo
         {
-            public TranslationSource TranslationSource { get; set; }
+            public TranslationSourceLanguage TranslationSource { get; set; }
             public string TextToTranslate { get; set; }
             public string SourceLanguage {  get; set; }
             public string[] TargetLanguages {  get; set; }
@@ -85,10 +85,9 @@ namespace Api
             public string[] ToScripts {  get; set; }
         }
         
-        public enum TranslationSource
+        public enum TranslationSourceLanguage
         {
             Chinese,
-            Pinyin,
             Engilsh
         };
 
@@ -98,7 +97,7 @@ namespace Api
             {
                 return new TranslationRequestInfo()
                 {
-                    TranslationSource = TranslationSource.Chinese,
+                    TranslationSource = TranslationSourceLanguage.Chinese,
                     TextToTranslate = cardDataDto.Chinese,
                     SourceLanguage = "zh-Hans",
                     TargetLanguages = new[] { "zh-Hans", "en" },
@@ -111,15 +110,55 @@ namespace Api
             {
                 return new TranslationRequestInfo()
                 {
-                    TranslationSource = TranslationSource.Engilsh,
+                    TranslationSource = TranslationSourceLanguage.Engilsh,
                     TextToTranslate = cardDataDto.English,
                     SourceLanguage = "en",
-                    TargetLanguages = new[] { "zh-Hans", "zh-Hans" },
+                    TargetLanguages = new[] { "zh-Hans" },
                     FromScript = "Latn",
-                    ToScripts = new[] { "Hans", "Latn" }
+                    ToScripts = new[] { "Latn" }
                 };
             }
             throw new NotImplementedException();
+        }
+        
+        CardDataDto PopulateCardData(CardDataDto inputCard, TranslationRequestInfo translationRequestInfo, TranslationResult[] translationResults)
+        {
+
+            var translations = translationResults.SelectMany(r => r.Translations);
+
+            
+            if (translationRequestInfo.TranslationSource == TranslationSourceLanguage.Chinese)
+            {
+                var englishTranslationResult = translations.FirstOrDefault(t => t.To == "en");
+                if (englishTranslationResult != null)
+                {
+                    inputCard.English = englishTranslationResult.Text;
+                }
+                var chineseToChineseTranslation = translations.FirstOrDefault(t => t.To == "zh-Hans");
+                if (chineseToChineseTranslation != null)
+                {
+                    if (chineseToChineseTranslation.Transliteration != null && chineseToChineseTranslation.Transliteration.Script == "Latn")
+                    {
+                        inputCard.Pinyin = chineseToChineseTranslation.Transliteration.Text;
+                    }
+                }
+            }
+
+            else if (translationRequestInfo.TranslationSource == TranslationSourceLanguage.Engilsh)
+            {
+                var chineseTranslationResult = translations.FirstOrDefault(t => t.To == "zh-Hans");
+                if (chineseTranslationResult != null)
+                {
+                    inputCard.Chinese = chineseTranslationResult.Text;
+                }
+                if (chineseTranslationResult.Transliteration != null && chineseTranslationResult.Transliteration.Script == "Latn")
+                {
+                    inputCard.Pinyin = chineseTranslationResult.Transliteration.Text;
+                }
+            }
+            return inputCard;
+            
+
         }
 
         [FunctionName("Translate")]
@@ -138,7 +177,6 @@ namespace Api
             var toScripts = String.Concat(translationParams.ToScripts.Select(l => $"&toScript={l}"));
 
             string translateRoute = $"/translate?api-version=3.0&from={translationParams.SourceLanguage}{targetLanguages}&fromScript={translationParams.FromScript}{toScripts}";
-            string transliterateRoute = $"/transliterate?api-version=3.0&language={translationParams.SourceLanguage}&fromScript={translationParams.FromScript}{toScripts}";
             object[] body = new object[] { new { Text = translationParams.TextToTranslate } };
             var requestBody = JsonConvert.SerializeObject(body);
             
@@ -155,40 +193,12 @@ namespace Api
      
                 string translationResult = await translationResponse.Content.ReadAsStringAsync();
                 TranslationResult[] deserializedOutput = JsonConvert.DeserializeObject<TranslationResult[]>(translationResult);
-                var translation = deserializedOutput.First().Translations.First().Text; 
 
-                if (translationParams.TranslationSource == TranslationSource.Engilsh)
-                {
-                    cardDataDto.Chinese = translation;
-                }
-                else if  (translationParams.TranslationSource == TranslationSource.Chinese)
-                {
-                    cardDataDto.English = translation;
-                }
-                else if (translationParams.TranslationSource == TranslationSource.Pinyin )
-                {
-                    cardDataDto.English = translation;
-                }
-    
+                CardDataDto toReturn = PopulateCardData(cardDataDto, translationParams, deserializedOutput);
+                    
+                return new OkObjectResult(cardDataDto);
+
             }
-
-            using (var transliterateRequest = new HttpRequestMessage())
-            {
-                transliterateRequest.Method = HttpMethod.Post;
-                transliterateRequest.RequestUri = new Uri(endpoint + transliterateRoute);
-                transliterateRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                transliterateRequest.Headers.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
-                transliterateRequest.Headers.Add("Ocp-Apim-Subscription-Region", location);
-                HttpResponseMessage transliterationResponse    = await httpClient.SendAsync(transliterateRequest).ConfigureAwait(false);
-                string transliterationResult = await transliterationResponse.Content.ReadAsStringAsync();
-                TransliterationResult[] deserializedOutput = JsonConvert.DeserializeObject<TransliterationResult[]>(transliterationResult);
-                var pinyin = deserializedOutput.First().Text;
-                cardDataDto.Pinyin = pinyin;
-                
-            }
-
-            return new OkObjectResult(cardDataDto);
-
         }
     }
 }
