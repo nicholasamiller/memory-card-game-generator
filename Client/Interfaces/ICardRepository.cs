@@ -5,9 +5,9 @@ namespace Client
 {
     public interface ICardRepository
     {
-        void AddCard(CardDataDto cardDataDto);
-        void RemoveCard(CardDataDto cardDataDto);
-        IList<CardDataDto> GetAllCards();
+        void AddCard(CardRecord cardRecord);
+        void RemoveCard(CardRecord cardRecord);
+        IList<CardRecord> GetAllCards();
 
     }
 }

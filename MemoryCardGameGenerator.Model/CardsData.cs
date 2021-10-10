@@ -16,13 +16,13 @@ namespace MemoryCardGameGenerator.Model
             return cardsData.Split(Environment.NewLine).Select(ParseLine);
         }
 
-        private static Regex lineRegex = new Regex(@"^(.*)\((.*)\)(.*)$");
+        private static Regex lineRegex = new Regex(@"^(.*\s)\((.*)\)(\s.*)(\s#[^\s])*$");
         private static CardPairSpec ParseLine(string line)
         {
             var r = lineRegex.Match(line);
             Debug.Assert(r.Groups[1].Success);
-            
-            return new CardPairSpec(new ChineseCardSpec(r.Groups[1].Value, r.Groups[2].Value), new EnglishCardSpec(r.Groups[3].Value.Trim()));
-        }
+            var cardSpec =  new CardPairSpec(new ChineseCardSpec(r.Groups[1].Value, r.Groups[2].Value), new EnglishCardSpec(r.Groups[3].Value.Trim()));
+            return cardSpec;            
+        } 
     }
 }

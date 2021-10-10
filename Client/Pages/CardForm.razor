@@ -28,9 +28,9 @@ Upload Spec - in json
 		@foreach (var card in CardRepository.GetAllCards())
 		{
 			<tr>
-				<td>@card.Chinese</td>
-				<td>@card.Pinyin</td>
-				<td>@card.English</td>
+				<td>@card.CardDataDto.Chinese</td>
+				<td>@card.CardDataDto.Pinyin</td>
+				<td>@card.CardDataDto.English</td>
 			</tr>
 		}
 	</tbody>

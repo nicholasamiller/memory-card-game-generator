@@ -1,30 +1,42 @@
 ﻿using MemoryCardGenerator.Shared;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Client.Services
 {
     public class CardDataRepository : ICardRepository
     {
-        private List<CardDataDto> _cards;
+        private List<CardRecord> _cards;
 
         public CardDataRepository()
         {
-            _cards = new List<CardDataDto>();
+            _cards = new List<CardRecord>();
         }
         
-        public void AddCard(CardDataDto cardDataDto)
+        public void AddCard(CardRecord cardRecord)
         {
-            _cards.Add(cardDataDto);
+            _cards.Add(cardRecord);
         }
 
-        public IList<CardDataDto> GetAllCards()
+        public IList<CardRecord> GetAllCards()
         {
             return _cards;
         }
 
-        public void RemoveCard(CardDataDto cardDataDto)
+        public void RemoveCard(CardRecord cardRecord)
         {
-            _cards.Remove(cardDataDto);
+            _cards.Remove(cardRecord);
+        }
+
+        public static List<CardRecord> ParseFromTextLines(string lines)
+        {
+            return
+                lines.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                .Select(l => CardRecord.ParseFromLine(l))
+                .Where(i => i != null)
+                .ToList(); 
+
         }
     }
 }

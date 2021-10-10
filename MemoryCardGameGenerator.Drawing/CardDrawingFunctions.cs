@@ -16,8 +16,6 @@ using Path = SixLabors.ImageSharp.Drawing.Path;
 
 namespace MemoryCardGameGenerator.Drawing
 {
-
-
  
     public static class CardDrawingFunctions
     {
@@ -54,10 +52,6 @@ namespace MemoryCardGameGenerator.Drawing
                 return collection;
             }
         }
-
-
-
-
 
 
         public static void AddGridLines(int numberOfCardsPerRow, int numberOfCardsPerColumn, SKRect area, SKCanvas canvas)

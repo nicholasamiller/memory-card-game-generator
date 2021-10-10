@@ -11,8 +11,7 @@
         <button class="btn btn-outline-secondary" type="button">Translate</button>
         <ValidationMessage For="@(() => _card.Chinese)"/>
     </div>
-  <div>
-      </div>
+  </div>
   <div class="mb-3">
     <label for="pinyin" class="form-label">拼音 Pinyin</label>
     <InputText @bind-Value=_card.Pinyin class=form-control id=pinyin/>
@@ -23,7 +22,15 @@
     <InputText @bind-Value=_card.English class="form-control" id="english"></InputText>
         <ValidationMessage For="@(() => _card.English)"/>
   </div>
-    <ValidationSummary />
+  // todo: autocomplete
+  <div class="mb-3">
+    <label for="tags" class="form-label">Tags</label>
+    <InputText @bind-Value=_tags class="form-control" id="tags"></InputText>
+        <ValidationMessage For="@(() => _tags)"/>
+  </div>
+  
+  <div>
+
   <button type="submit" class="btn btn-primary">提交 Add</button>
   </div>
 </EditForm>
@@ -31,10 +38,13 @@
 @code {
 
     CardDataDto _card = new CardDataDto();
+    string _tags = String.Empty;
+
 
 	private async Task Submit()
 	{
-        CardRepository.AddCard(_card);
+        var tags = _tags.Split(",").Select(t => t.Trim()).ToArray();
+        CardRepository.AddCard(new CardRecord() { CardDataDto = _card, Tags = tags });
         _card = new CardDataDto();
         StateHasChanged();
     }
