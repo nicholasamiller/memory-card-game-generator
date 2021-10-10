@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Client.Services
 {
@@ -28,6 +29,11 @@ namespace Client.Services
         {
             _cards.Remove(cardRecord);
         }
+        
+        public static CardRecord ParseFromLine(string line)
+        {
+            return CardRecord.ParseFromLine(line);
+        }
 
         public static List<CardRecord> ParseFromTextLines(string lines)
         {
@@ -37,6 +43,22 @@ namespace Client.Services
                 .Where(i => i != null)
                 .ToList(); 
 
+        }
+
+        public static string RenderToLines(List<CardRecord> cards)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (CardRecord card in cards)
+            {
+                sb.AppendLine($"{card.CardDataDto.Chinese} ({card.CardDataDto.Pinyin}) {card.CardDataDto.English} {String.Join(" ", card.Tags)}");
+            }
+
+            return sb.ToString();
+        }
+
+        public void RemoveAllCards()
+        {
+            _cards = new List<CardRecord>();
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿@page "/files"
+@using System.IO
+@using System.Text
+@using Client.Services
+@using MemoryCardGenerator.Shared
+@inject ICardRepository CardRepository
+
+<InputFile OnChange=@LoadData />
+
+@code {
+	private async void LoadData(InputFileChangeEventArgs e)
+	{
+		using (var fs = e.File.OpenReadStream())
+		{
+			try
+			{
+				using StreamReader streamReader = new(fs, Encoding.UTF8);
+				List<CardRecord> acc = new();
+				string line;
+				while ((line = await streamReader.ReadLineAsync()) != null)
+				{
+					var parsedLine = CardRecord.ParseFromLine(line);
+					if (parsedLine != null)
+					{
+						acc.Add(parsedLine);
+					}
+				}
+				if (acc.Count > 0)
+				{
+					CardRepository.RemoveAllCards();
+					foreach (var c in acc)
+					{
+						CardRepository.AddCard(c);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+		}
+
+
+	}
+}

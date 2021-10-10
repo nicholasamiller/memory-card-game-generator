@@ -8,6 +8,7 @@ namespace Client
         void AddCard(CardRecord cardRecord);
         void RemoveCard(CardRecord cardRecord);
         IList<CardRecord> GetAllCards();
+        void RemoveAllCards();
 
     }
 }
