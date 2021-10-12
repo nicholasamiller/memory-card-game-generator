@@ -1,45 +1,163 @@
-﻿@page "/files"
+﻿@page "/load"
 @using System.IO
 @using System.Text
 @using Client.Services
 @using MemoryCardGenerator.Shared
+@using System.ComponentModel.DataAnnotations
 @inject ICardRepository CardRepository
 
-<InputFile OnChange=@LoadData />
+
+<div class="container">
+<div class="col">
+	<div class="card"> 
+		<div class="card-body">
+			 <h5 class="card-title">Load your Own</h5>
+<EditForm EditContext=@_editContext OnValidSubmit=@LoadToRepo>
+	<DataAnnotationsValidator/>
+	<div class="mb-3">
+		<label for="upload" class="form-label">Upload your own file with card data.</label>
+		<InputFile id="upload" type="file" class="form-control" accept=".txt" OnChange=@LoadData></InputFile>
+	</div>
+	<ValidationMessage For="@(() => loadCharactersModel.ParsedCards)"/> 
+	<InputRadioGroup @bind-Value="loadCharactersModel.LoadIntention">
+		@foreach (var option in LoadIntentionValues)
+						{
+							<InputRadio Value=@option/> @option <br/>
+						}
+	</InputRadioGroup>
+	<ValidationMessage For="@(() => loadCharactersModel.LoadIntention)"/>
+		
+	<div class="form-text">
+		<p>One card per line, with the format:</p>
+	 <p><i>Chinese characters (pinyin) English translation #optionalTag1 #optionalTag2</i></p>
+	 <p>For example:</p>
+		
+	<code>
+一 (yì) one<br />
+
+二 (èr) two #numbers<br />
+
+三 (sān) three #numbers<br />
+
+人 (rén) a person, human	#basic<br />
+	</code>
+
+	</div>
+
+	<div class="mb-3 mt-3">
+		<button class="btn btn-primary" type="submit">Load</button>
+	</div>
+</EditForm> </div>
+	
+</div>
+</div>
+</div>
+
+
+@*<div id="loadHelp" class="form-text">
+	Currently loaded: @(CardRepository.CurrentlyLoadedListName != null ? @CardRepository.CurrentlyLoadedListName
+	: "None")
+
+	</div>*@
 
 @code {
-	private async void LoadData(InputFileChangeEventArgs e)
+
+	private class LoadCharactersModel
 	{
-		using (var fs = e.File.OpenReadStream())
+		
+		public Stream UploadStream { get; set; }
+		
+		[Required(ErrorMessage="Do you want to replace the currently loaded set or add to it?")]
+
+		public string LoadIntention { get; set; }
+		public List<CardRecord> ParsedCards { get; set; }
+
+		public LoadCharactersModel()
 		{
-			try
+			ParsedCards = new List<CardRecord>();		
+		}
+	}
+
+		
+	private static List<string> LoadIntentionValues => new List<string>() { "Append", "Replace" };
+
+	LoadCharactersModel loadCharactersModel = new LoadCharactersModel();
+
+	EditContext _editContext;
+	ValidationMessageStore _messageStore;
+	protected override void OnInitialized()
+	{
+		_editContext = new EditContext(loadCharactersModel);
+		_editContext.OnValidationRequested += HandleValidationRequested;
+		_messageStore = new(_editContext);
+	}
+	
+	private async void HandleValidationRequested(object sender, ValidationRequestedEventArgs args)
+	{
+		_messageStore.Clear();
+		var cardsLoaded = await  TryLoadCards(loadCharactersModel.UploadStream);
+		if (!cardsLoaded)
+		{
+			_messageStore.Add(() => loadCharactersModel.ParsedCards, "Load a valid file.");
+		};
+	}
+
+	private string _currentlyLoadedFileName;
+
+	private void LoadToRepo()
+	{
+		CardRepository.RemoveAllCards();
+		foreach (var card in loadCharactersModel.ParsedCards)
+		{
+			CardRepository.AddCard(card);		
+		}
+		StateHasChanged();
+
+	}
+
+	private async Task<bool> TryLoadCards(Stream stream)
+	{
+		try
+		{
+			using StreamReader streamReader = new(stream, Encoding.UTF8);
+			string line;
+			
+			while ((line = await streamReader.ReadLineAsync()) != null)
 			{
-				using StreamReader streamReader = new(fs, Encoding.UTF8);
-				List<CardRecord> acc = new();
-				string line;
-				while ((line = await streamReader.ReadLineAsync()) != null)
+				var parsedLine = CardRecord.ParseFromLine(line);
+				if (parsedLine != null)
 				{
-					var parsedLine = CardRecord.ParseFromLine(line);
-					if (parsedLine != null)
-					{
-						acc.Add(parsedLine);
-					}
-				}
-				if (acc.Count > 0)
-				{
-					CardRepository.RemoveAllCards();
-					foreach (var c in acc)
-					{
-						CardRepository.AddCard(c);
-					}
+					loadCharactersModel.ParsedCards.Add(parsedLine);
 				}
 			}
-			catch (Exception ex)
+			if (loadCharactersModel.ParsedCards.Count > 0)
 			{
-				Console.WriteLine(ex);
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 
-
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex);
+			return false;
+		}
 	}
+
+	private async void LoadData(InputFileChangeEventArgs e)
+	{
+		loadCharactersModel.UploadStream = e.File.OpenReadStream();
+	}
+
+	public void Dispose()
+	{
+		_editContext.OnValidationRequested -= HandleValidationRequested;
+		if (loadCharactersModel.UploadStream != null)
+			loadCharactersModel.UploadStream.Close();
+	}
+
 }
+

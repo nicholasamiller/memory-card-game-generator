@@ -9,6 +9,7 @@ namespace Client
         void RemoveCard(CardRecord cardRecord);
         IList<CardRecord> GetAllCards();
         void RemoveAllCards();
+        string CurrentlyLoadedListName { get; set; }
 
     }
 }

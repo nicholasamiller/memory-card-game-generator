@@ -10,6 +10,9 @@ namespace Client.Services
     {
         private List<CardRecord> _cards;
 
+        private string _currentlyLoadedListName;
+        public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
+
         public CardDataRepository()
         {
             _cards = new List<CardRecord>();
@@ -42,7 +45,6 @@ namespace Client.Services
                 .Select(l => CardRecord.ParseFromLine(l))
                 .Where(i => i != null)
                 .ToList(); 
-
         }
 
         public static string RenderToLines(List<CardRecord> cards)
@@ -60,5 +62,6 @@ namespace Client.Services
         {
             _cards = new List<CardRecord>();
         }
+
     }
 }
