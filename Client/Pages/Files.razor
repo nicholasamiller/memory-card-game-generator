@@ -6,51 +6,62 @@
 @using System.ComponentModel.DataAnnotations
 @inject ICardRepository CardRepository
 
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+	<symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+		<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+	</symbol>
+</svg>
 
 <div class="container-fluid">
-<div class="col">
-	<div class="card"> 
-		<div class="card-body">
-			 <h5 class="card-title">Load your Own</h5>
-<EditForm EditContext=@_editContext  OnValidSubmit=@LoadToRepo>
-	<DataAnnotationsValidator/>
-	<div class="mb-3">
-		<label for="upload" class="form-label">Upload your own file with card data.</label>
-		<InputFile id="upload" type="file" class="form-control" accept=".txt" OnChange=@LoadData></InputFile>
-	</div>
-	<ValidationMessage For="@(() => loadCharactersModel.ParsedCards)"/> 
-	<InputRadioGroup @bind-Value="loadCharactersModel.LoadIntention">
-		@foreach (var option in LoadIntentionValues)
+	<div class="col border">
+				<h3>Load your own</h3>
+				<EditForm EditContext=@_editContext OnValidSubmit=@LoadToRepo>
+					<DataAnnotationsValidator />
+					<div class="mb-3">
+						<label for="upload" class="form-label">Upload your own file with card data.</label>
+						<InputFile id="upload" type="file" class="form-control" accept=".txt" OnChange=@LoadData></InputFile>
+					</div>
+					<ValidationMessage For="@(() => loadCharactersModel.ParsedCards)" />
+					<InputRadioGroup @bind-Value="loadCharactersModel.LoadIntention">
+						@foreach (var option in LoadIntentionValues)
 						{
-							<InputRadio Value=@option/> @option <br/>
+							<InputRadio Value=@option /> @option <br />
 						}
-	</InputRadioGroup>
-	<ValidationMessage For="@(() => loadCharactersModel.LoadIntention)"/>
-		
-	<div class="form-text">
-		<p>One card per line, with the format:</p>
-	 <p><i>Chinese characters (pinyin) English translation #optionalTag1 #optionalTag2</i></p>
-	 <p>For example:</p>
-		
-	<code>
-一 (yì) one<br />
+					</InputRadioGroup>
+					<ValidationMessage For="@(() => loadCharactersModel.LoadIntention)" />
 
-二 (èr) two #numbers<br />
+					<div class="form-text">
+						<p>One card per line, with the format:</p>
+						<p><i>Chinese characters (pinyin) English translation #optionalTag1 #optionalTag2</i></p>
+						<p>For example:</p>
 
-三 (sān) three #numbers<br />
+						<code>
+							一 (yì) one<br />
 
-人 (rén) a person, human	#basic<br />
-	</code>
+							二 (èr) two #numbers<br />
 
-	</div>
+							三 (sān) three #numbers<br />
 
-	<div class="mb-3 mt-3">
-		<button class="btn btn-primary" type="submit">Load</button>
-	</div>
-</EditForm> </div>
-	
-</div>
-</div>
+							人 (rén) a person, human	#basic<br />
+						</code>
+
+					</div>
+
+					<div class="mb-3 mt-3">
+						<button class="btn btn-primary" type="submit">Load</button>
+					</div>
+
+					<div id="successMessage" class="d-@successMessageDisplayClassValue">
+						<div class="alert alert-success d-flex align-items-center" role="alert">
+							<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+							<div>
+								An example success alert with an icon
+							</div>
+						</div>
+					</div>
+				</EditForm>
+			</div>
+
 </div>
 
 
@@ -62,21 +73,24 @@
 
 @code {
 
+	private string successMessage;
+	private string successMessageDisplayClassValue = "none";
+
 	private class LoadCharactersModel
 	{
-		
-		[Required(ErrorMessage="Do you want to replace the currently loaded set or add to it?")]
+
+		[Required(ErrorMessage = "Do you want to replace the currently loaded set or add to it?")]
 
 		public string LoadIntention { get; set; }
 		public List<CardRecord> ParsedCards { get; set; }
 
 		public LoadCharactersModel()
 		{
-			ParsedCards = new List<CardRecord>();		
+			ParsedCards = new List<CardRecord>();
 		}
 	}
 
-		
+
 	private static List<string> LoadIntentionValues => new List<string>() { "Append", "Replace" };
 
 	LoadCharactersModel loadCharactersModel = new LoadCharactersModel();
@@ -87,11 +101,11 @@
 	{
 		_editContext = new EditContext(loadCharactersModel);
 		_editContext.OnValidationRequested += HandleValidationRequested;
-	
+
 		_messageStore = new(_editContext);
 	}
-	
-	private  void HandleValidationRequested(object sender, ValidationRequestedEventArgs args)
+
+	private void HandleValidationRequested(object sender, ValidationRequestedEventArgs args)
 	{
 		_messageStore.Clear();
 		if (loadCharactersModel.ParsedCards.Count == 0)
@@ -105,7 +119,7 @@
 		CardRepository.RemoveAllCards();
 		foreach (var card in loadCharactersModel.ParsedCards)
 		{
-			CardRepository.AddCard(card);		
+			CardRepository.AddCard(card);
 		}
 		StateHasChanged();
 
