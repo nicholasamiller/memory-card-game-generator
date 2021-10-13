@@ -1,6 +1,7 @@
 ﻿@page "/add"
 @using MemoryCardGenerator.Shared
 @inject ICardRepository CardRepository
+@inject HttpClient _httpClient;
 
 <EditForm OnValidSubmit="Submit" Model="@_card">
      <DataAnnotationsValidator />
@@ -8,7 +9,7 @@
     <label for="chinese" class="col-form-label">汉字 Chinese Character(s)</label>
      <div class="mb-3 input-group">
         <InputText @bind-Value=_card.Chinese class=form-control id=chinese/>
-        <button class="btn btn-outline-secondary" type="button">Translate</button>
+        <button class="btn btn-outline-secondary" type="button" @onclick="@OnTranslationRequested">Translate</button>
         <ValidationMessage For="@(() => _card.Chinese)"/>
     </div>
   </div>
@@ -19,15 +20,20 @@
   </div>
   <div class="mb-3">
     <label for="english" class="form-label">英语 English</label>
-    <InputText @bind-Value=_card.English class="form-control" id="english"></InputText>
-        <ValidationMessage For="@(() => _card.English)"/>
+   <div class="mb-3 input-group">
+       <InputText @bind-Value=_card.English class="form-control" id="english"></InputText>
+        <button class="btn btn-outline-secondary" type="button" @onclick="@OnTranslationRequested">Translate</button>
+       <ValidationMessage For="@(() => _card.English)"/>
+   </div>
+    
+
   </div>
-  // todo: autocomplete
-  <div class="mb-3">
+ @* <div class="mb-3">
     <label for="tags" class="form-label">Tags</label>
+    
     <InputText @bind-Value=_tags class="form-control" id="tags"></InputText>
         <ValidationMessage For="@(() => _tags)"/>
-  </div>
+  </div>*@
   
   <div>
 
@@ -40,6 +46,23 @@
     CardDataDto _card = new CardDataDto();
     string _tags = String.Empty;
 
+    private async Task OnTranslationRequested()
+    {
+        try
+        {
+            var translationResponse = await _httpClient.PostAsJsonAsync("/api/Translate", _card);
+            translationResponse.EnsureSuccessStatusCode();
+            var dtoReturned = await translationResponse.Content.ReadFromJsonAsync<CardDataDto>();
+            _card = dtoReturned;
+            StateHasChanged();
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+    }
 
 	private async Task Submit()
 	{

@@ -69,10 +69,6 @@ namespace MemoryCardGameGenerator.Drawing
             return matches.ToList().Select(m => m.Value.Trim()).Where(s => !String.IsNullOrWhiteSpace(s)).ToList();
         }
 
-    
-      
-
-
 
         private void DrawEnglishCard(SKRect region, EnglishCardSpec englishCardSpec, SKCanvas canvas)
         {

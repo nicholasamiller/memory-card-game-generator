@@ -182,7 +182,6 @@ namespace Api
             
             using (var translateRequest = new HttpRequestMessage())
             {
-       
                 translateRequest.Method = HttpMethod.Post;
                 translateRequest.RequestUri = new Uri(endpoint + translateRoute);
                 translateRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
