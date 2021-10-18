@@ -93,12 +93,13 @@
 
 	private static List<string> LoadIntentionValues => new List<string>() { "Append", "Replace" };
 
-	LoadCharactersModel loadCharactersModel = new LoadCharactersModel();
+	LoadCharactersModel loadCharactersModel;
 
 	EditContext _editContext;
 	ValidationMessageStore _messageStore;
 	protected override void OnInitialized()
 	{
+		loadCharactersModel = new LoadCharactersModel();
 		_editContext = new EditContext(loadCharactersModel);
 		_editContext.OnValidationRequested += HandleValidationRequested;
 

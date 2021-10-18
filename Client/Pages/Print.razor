@@ -1,15 +1,50 @@
 ﻿@page "/print"
+@using System.ComponentModel.DataAnnotations
 
-<h3>Print</h3>
+<div class="col border">
+    <EditForm EditContext="@_editContext"  OnValidSubmit="@OnValidSubmit">
+        <DataAnnotationsValidator />
+        <div class="mb-1">
+            <label for="numberOfCards" class="col-form-label">Number of cards per page:</label>
+        </div>
+        <div class="mb-3">
+            <InputRadioGroup id="numberOfCards" @bind-Value="_printRequestModel.NumberOfCardsPerPage">
+                <InputRadio Value="1" /> One<br />
+                <InputRadio Value="4" /> Four<br />
+            </InputRadioGroup>
+            <ValidationMessage For="@(() => _printRequestModel.NumberOfCardsPerPage)"></ValidationMessage>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Generate PDF</button>
+        </div>
+        <ValidationSummary/>
+    </EditForm>
+</div>
 
-// hook up printer
 //Form to set number of cards per page
-
-<EditForm Model
+// generate file
+// download file
 
 
 @code {
+    private PrintRequestModel _printRequestModel;
+    EditContext _editContext;
+    protected override void OnInitialized()
+    {
+        _printRequestModel = new PrintRequestModel();
+        _editContext = new EditContext(_printRequestModel);
+    }
 
-	private class 
+    private class PrintRequestModel
+    {
+        [Required(ErrorMessage = "How many cards per page?")]
+        public string NumberOfCardsPerPage { get; set; }
+    }
+
+    private async void OnValidSubmit()
+    {
+        var numberOfCards = Convert.ToInt16(_printRequestModel.NumberOfCardsPerPage);
+         
+    }
 
 }
