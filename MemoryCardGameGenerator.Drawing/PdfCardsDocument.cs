@@ -53,7 +53,7 @@ Extra blank cards at end.";
             var lines = text.Split(Environment.NewLine).ToList();
             var regionForText = SKRect.Create(new SKPoint(PagePair.PAGE_WIDTH / 20, PagePair.PAGE_HEIGHT / 20), new SKSize(PagePair.PAGE_WIDTH / 1.1f, PagePair.PAGE_HEIGHT / 1.1f));
 
-            CardDrawingFunctions.DrawTextBox(lines, _typeFacesConfig.regular, regionForText, sKCanvas);
+            CardDrawingFunctions.DrawTextBox(lines, _typeFacesConfig.Regular, regionForText, sKCanvas);
                         
         }
 

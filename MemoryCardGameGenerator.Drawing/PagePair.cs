@@ -8,8 +8,19 @@ using System.Text.RegularExpressions;
 
 namespace MemoryCardGameGenerator.Drawing
 {
+    public class TypeFacesConfig
+    {
+        public TypeFacesConfig(SKTypeface regular, SKTypeface bold, SKTypeface light)
+        {
+            Regular = regular;
+            Bold = bold;
+            Light = light;
+        }
 
-    public record TypeFacesConfig(SKTypeface regular, SKTypeface bold, SKTypeface light);
+        public SKTypeface Regular { get; }
+        public SKTypeface Bold { get; }
+        public SKTypeface Light { get; }
+    }
 
     public class PagePair
     {
@@ -39,9 +50,9 @@ namespace MemoryCardGameGenerator.Drawing
 
             _cardRegions = GetCardRegionsByRowsThenColumns(_gridArea);
 
-            _boldTypeFace = typeFacesConfig.bold;
-            _regularTypeFace = typeFacesConfig.regular;
-            _lightTypeFace = typeFacesConfig.light;
+            _boldTypeFace = typeFacesConfig.Bold;
+            _regularTypeFace = typeFacesConfig.Regular;
+            _lightTypeFace = typeFacesConfig.Light;
 
         }
 
@@ -77,7 +88,7 @@ namespace MemoryCardGameGenerator.Drawing
 
             var paddedRegion = new SKRect(region.Left + horizontalPaddingPropertion * region.Width, region.Top + vertialPaddingProportion * region.Height, region.Right - horizontalPaddingPropertion * region.Width, region.Bottom - vertialPaddingProportion * region.Height);
 
-            var lines = splitToLines(englishCardSpec.englishWord);
+            var lines = splitToLines(englishCardSpec.EnglishWord);
             CardDrawingFunctions.DrawTextBox(lines, _boldTypeFace, paddedRegion, canvas);
         }
         private void DrawChineseCard(SKRect region, ChineseCardSpec chineseCardSpec, SKCanvas canvas)
@@ -85,11 +96,11 @@ namespace MemoryCardGameGenerator.Drawing
             float amountToLeaveForSubtitles = region.Height * 1 / 4;
             var cardAreaForCharacter = new SKRect(region.Left, region.Top, region.Right, region.Bottom - amountToLeaveForSubtitles);
 
-            CardDrawingFunctions.DrawTextVisuallyCenteredInsideRectWithResize(cardAreaForCharacter, chineseCardSpec.chineseCharacter, _boldTypeFace, 0, canvas);
+            CardDrawingFunctions.DrawTextVisuallyCenteredInsideRectWithResize(cardAreaForCharacter, chineseCardSpec.ChineseCharacter, _boldTypeFace, 0, canvas);
 
             var cardAreaForPinyin = new SKRect(cardAreaForCharacter.Left, cardAreaForCharacter.Bottom, cardAreaForCharacter.Right, cardAreaForCharacter.Bottom + (region.Height - cardAreaForCharacter.Height));
 
-            CardDrawingFunctions.DrawTextVisuallyCenteredInsideRectWithResize(cardAreaForPinyin, PadTextTo(20, chineseCardSpec.pinyin), _lightTypeFace, 0.15f, canvas);
+            CardDrawingFunctions.DrawTextVisuallyCenteredInsideRectWithResize(cardAreaForPinyin, PadTextTo(20, chineseCardSpec.Pinyin), _lightTypeFace, 0.15f, canvas);
         }
        
         public void RenderBackPage(SKCanvas backPageCanvas)

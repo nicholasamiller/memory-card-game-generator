@@ -87,8 +87,19 @@ namespace MemoryCardGameGenerator.Drawing
                 .ForEach(p => canvas.DrawLine(p.Start, p.End, skPaint));
 
         }
+       
+        public class TextBoxResult
+        {
+            public TextBoxResult(SKRect rect, SKPaint paintToUse)
+            {
+                Rect = rect;
+                PaintToUse = paintToUse;
+            }
 
-        public record TextBoxResult(SKRect rect, SKPaint paintToUse);
+            public SKRect Rect { get; }
+            public SKPaint PaintToUse { get; }
+        }
+
         public static TextBoxResult sizeTextForPaddedRect(string text, SKPaint paint, SKRect boundingBox, float paddingProportion)
         {
             var initialWidth = paint.MeasureText(text);
@@ -112,15 +123,15 @@ namespace MemoryCardGameGenerator.Drawing
                 Typeface = sKTypeface
             };
             var resultForLongestLine = CardDrawingFunctions.sizeTextForPaddedRect(longestLine, initialPaint, sKRect, 0.75f);
-            var heightForLongestLine = resultForLongestLine.rect.Height;
+            var heightForLongestLine = resultForLongestLine.Rect.Height;
             var lineSpace = 0.2f * heightForLongestLine;
             var lineRects = new Stack<SKRect>(CardDrawingFunctions.GetLineRects(sKRect, lines.Count(), lineSpace));
 
             foreach (var l in lines)
             {
                 SKRect textBoundsForLine = new SKRect();
-                resultForLongestLine.paintToUse.MeasureText(l, ref textBoundsForLine);
-                CardDrawingFunctions.DrawTextCentredInsideRect(l, lineRects.Pop(), textBoundsForLine, resultForLongestLine.paintToUse, canvas);
+                resultForLongestLine.PaintToUse.MeasureText(l, ref textBoundsForLine);
+                CardDrawingFunctions.DrawTextCentredInsideRect(l, lineRects.Pop(), textBoundsForLine, resultForLongestLine.PaintToUse, canvas);
             }
         }
 
@@ -143,9 +154,9 @@ namespace MemoryCardGameGenerator.Drawing
 
             var textSizeInfo = sizeTextForPaddedRect(text, initialPaint, rect, paddingPropertion);
 
-            var topLeftPointToGetTextCentred = new SKPoint(rect.Left + rect.Width / 2 - textSizeInfo.rect.MidX, rect.Top + (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textSizeInfo.rect.MidY);
+            var topLeftPointToGetTextCentred = new SKPoint(rect.Left + rect.Width / 2 - textSizeInfo.Rect.MidX, rect.Top + (rect.Height / 2 - rect.Height * upwardsOffsetProportion) - textSizeInfo.Rect.MidY);
 
-            canvas.DrawText(text, topLeftPointToGetTextCentred, textSizeInfo.paintToUse);
+            canvas.DrawText(text, topLeftPointToGetTextCentred, textSizeInfo.PaintToUse);
         }
 
 
