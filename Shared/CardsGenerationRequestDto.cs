@@ -5,8 +5,16 @@ namespace MemoryCardGenerator.Shared
     {
         public string Name { get; set; }
 
-        public int? CardsPerPage { get; set; }
+        public CardsPerPage CardsPerPage { get; set; }
 
         public CardRecord[] Cards { get; set; }
+    }
+
+    public enum CardsPerPage
+    {
+        One = 1,
+        Four = 4,
+        Twelve = 12,
+        Twenty = 20
     }
 }

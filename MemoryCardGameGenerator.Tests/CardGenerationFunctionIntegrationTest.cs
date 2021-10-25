@@ -18,15 +18,12 @@ namespace MemoryCardGameGenerator.Tests
             var testRecord = new CardRecord() { CardDataDto = testData, Tags = new[] { "test", "meat" } };
 
             var httpClient = new HttpClient();
-            var testRequestData = new CardsGenerationRequestDto() { Cards = new[] { testRecord },CardsPerPage = 20,Name = "TestGenerate" };
+            var testRequestData = new CardsGenerationRequestDto() { Cards = new[] { testRecord },CardsPerPage = CardsPerPage.Twenty,Name = "TestGenerate" };
             var result = Api.CardGenerationFunction.Run(testRequestData, null).Result as FileContentResult;
             
             var tempFileName = Path.GetTempFileName() + ".pdf";
             File.WriteAllBytes(tempFileName, result.FileContents);
             System.Console.WriteLine(tempFileName);
-
-
-
         }
     }
 }

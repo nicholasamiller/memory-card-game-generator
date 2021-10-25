@@ -24,7 +24,7 @@ namespace Api
             var specs = cardsGenerationRequestDto.Cards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
             using (var ms = new MemoryStream())
             { 
-                MemoryCardGameGenerator.Drawing.Generate.WritePdf(ms, specs,ConvertNumberOfCardsToCardsPerRow(cardsGenerationRequestDto.CardsPerPage.Value));
+                MemoryCardGameGenerator.Drawing.Generate.WritePdf(ms, specs,ConvertNumberOfCardsToCardsPerRow(cardsGenerationRequestDto.CardsPerPage));
 
                 return new FileContentResult(ms.ToArray(), "application/pdf");
             }
@@ -32,14 +32,14 @@ namespace Api
 
         }
 
-        private static int ConvertNumberOfCardsToCardsPerRow(int numberOfCards)
+        private static int ConvertNumberOfCardsToCardsPerRow(CardsPerPage cardsPerPage)
         {
-            switch (numberOfCards)
+            switch (cardsPerPage)
             {
-                case 1: return 1;
-                case 4: return 2;
-                case 12: return 3;
-                case 20: return 4;
+                case CardsPerPage.One: return 1;
+                case CardsPerPage.Four: return 2;
+                case CardsPerPage.Twelve: return 3;
+                case CardsPerPage.Twenty: return 4;
                 default: return 4;
             }
         }

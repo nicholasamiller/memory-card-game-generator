@@ -73,12 +73,11 @@ namespace MemoryCardGameGenerator.Drawing
             var pdfMetadata = SKDocumentPdfMetadata.Default;
             pdfMetadata.Author = "Nick Miller";
             pdfMetadata.Creation = System.DateTime.Now;
-            pdfMetadata.Creator = "Nick's Memory Card Generator Program";
-            pdfMetadata.Title = "Memory Game and Flashcards for KMIP Mawson Primary";
+            pdfMetadata.Creator = "KMIP Cards Generator";
+            pdfMetadata.Title = "KMIP Cards";
             pdfMetadata.RasterDpi = 300;
 
             var pdfDoc = SKDocument.CreatePdf(outputPdfStream, pdfMetadata);
-
      
             foreach (var pp in _pagePairs)
             {

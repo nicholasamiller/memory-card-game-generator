@@ -11,6 +11,7 @@
             <InputRadioGroup id="numberOfCards" @bind-Value="_printRequestModel.NumberOfCardsPerPage">
                 <InputRadio Value="1" /> One<br />
                 <InputRadio Value="4" /> Four<br />
+                <InputRadio Value="4" /> <br />
             </InputRadioGroup>
             <ValidationMessage For="@(() => _printRequestModel.NumberOfCardsPerPage)"></ValidationMessage>
         </div>
