@@ -13,8 +13,6 @@ using Newtonsoft.Json;
 
 namespace Api
 {
-       
-
     public class CharacterTranslateFunction
     {
         public class TranslationResult
