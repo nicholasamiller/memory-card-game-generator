@@ -11,19 +11,48 @@ namespace MemoryCardGameGenerator.Drawing
     {
         private List<PagePair> _pagePairs;
         private readonly TypeFacesConfig _typeFacesConfig;
+        
+        private class CardNumberData
+        {
+            public int CardsPerRow { get; set; }
+            public int NumberOfRows { get; set; }
+            public int GetCardsPerPage() => CardsPerRow * NumberOfRows;
+        }
+
+        private CardNumberData InferCardNumberData(int cardsPerRow)
+        {
+            if (cardsPerRow == 1)
+            {
+                return new CardNumberData() { CardsPerRow = cardsPerRow, NumberOfRows = 1 };
+            }
+            else if (cardsPerRow == 2)
+            {
+                // six runs off end of page
+                return new CardNumberData() { CardsPerRow = cardsPerRow, NumberOfRows = 2 };
+            }
+            else if (cardsPerRow == 3)
+            {
+                return new CardNumberData() { CardsPerRow = cardsPerRow, NumberOfRows = 4 };
+            }
+            else if (cardsPerRow == 4)
+            {
+
+                return new CardNumberData() { CardsPerRow = cardsPerRow, NumberOfRows = 5 };
+            }
+            else
+            {
+                return new CardNumberData() { CardsPerRow = cardsPerRow, NumberOfRows = cardsPerRow + 1 };
+            }
+        }
 
         public PdfCardsDocument(IEnumerable<CardPairSpec> cards, int numberOfCardsPerRow, TypeFacesConfig typeFacesConfig)
         {
-            if (numberOfCardsPerRow < 3)
-            {
-                throw new ArgumentException("Three cards per row minimum");
-            }
-            var cardsPerPage = numberOfCardsPerRow * (numberOfCardsPerRow + 1);
-            var batched = Batch(cards,cardsPerPage);
+            var cardNumberData = InferCardNumberData(numberOfCardsPerRow);
+            var batched = Batch(cards,cardNumberData.GetCardsPerPage());
             List<PagePair> pagePairs = new List<PagePair>();
             foreach (var b in batched)
             {
-                var pp = new PagePair(numberOfCardsPerRow, numberOfCardsPerRow + 1,typeFacesConfig);
+                var pp = new PagePair(cardNumberData.CardsPerRow,cardNumberData.NumberOfRows,typeFacesConfig);
                 foreach (var c in b)
                 {
                     pp.AddCard(c);
@@ -31,32 +60,13 @@ namespace MemoryCardGameGenerator.Drawing
                 pagePairs.Add(pp);
             }
             // add empty one at end
-            pagePairs.Add(new PagePair(numberOfCardsPerRow, numberOfCardsPerRow + 1, typeFacesConfig));
+            pagePairs.Add(new PagePair(cardNumberData.CardsPerRow,cardNumberData.NumberOfRows, typeFacesConfig));
             
             _pagePairs = pagePairs;
-
 
             this._typeFacesConfig = typeFacesConfig;
         }
         
-
-        private void RenderTitlePage(SKCanvas sKCanvas)
-        {
-            var text = @"Lockdown Game for Mawson Primary KMIP: Fun!
-Print A4, from page 2; cut along dashed lines.
-Memory game: print single sided.
-Suggest loading printer with alternating paper colours.
-Flash cards: print double sided, flip on long edge.
-Use card stock or glue to cardboard if keen.
-Extra blank cards at end.";
-
-            var lines = text.Split(Environment.NewLine).ToList();
-            var regionForText = SKRect.Create(new SKPoint(PagePair.PAGE_WIDTH / 20, PagePair.PAGE_HEIGHT / 20), new SKSize(PagePair.PAGE_WIDTH / 1.1f, PagePair.PAGE_HEIGHT / 1.1f));
-
-            CardDrawingFunctions.DrawTextBox(lines, _typeFacesConfig.Regular, regionForText, sKCanvas);
-                        
-        }
-
 
         public void Render(Stream outputPdfStream)
         {
@@ -69,10 +79,7 @@ Extra blank cards at end.";
 
             var pdfDoc = SKDocument.CreatePdf(outputPdfStream, pdfMetadata);
 
-            var titlePage = pdfDoc.BeginPage(PagePair.PAGE_WIDTH, PagePair.PAGE_HEIGHT);
-            RenderTitlePage(titlePage);
-            pdfDoc.EndPage();
-
+     
             foreach (var pp in _pagePairs)
             {
                 var frontPage = pdfDoc.BeginPage(PagePair.PAGE_WIDTH, PagePair.PAGE_HEIGHT);

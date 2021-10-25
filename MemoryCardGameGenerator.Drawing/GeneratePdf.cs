@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MemoryCardGameGenerator.Drawing
 {
-    static class Generate
+    public static class Generate
     {
         public static void WritePdf(Stream outputStream, List<CardPairSpec> specs, int cardsPerRow)
         {

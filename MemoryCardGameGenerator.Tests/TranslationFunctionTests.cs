@@ -37,7 +37,9 @@ namespace MemoryCardGameGenerator.Tests
             CardDataDto card = result.Value as CardDataDto;
             Assert.IsTrue(!String.IsNullOrWhiteSpace(card.Chinese));
         }
+        
 
+      
 
     }
 }
