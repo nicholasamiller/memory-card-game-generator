@@ -69,9 +69,9 @@ Extra blank cards at end.";
 
             var pdfDoc = SKDocument.CreatePdf(outputPdfStream, pdfMetadata);
 
-            var titlePage = pdfDoc.BeginPage(PagePair.PAGE_WIDTH, PagePair.PAGE_HEIGHT);
-            RenderTitlePage(titlePage);
-            pdfDoc.EndPage();
+            //var titlePage = pdfDoc.BeginPage(PagePair.PAGE_WIDTH, PagePair.PAGE_HEIGHT);
+            //RenderTitlePage(titlePage);
+            //pdfDoc.EndPage();
 
             foreach (var pp in _pagePairs)
             {
