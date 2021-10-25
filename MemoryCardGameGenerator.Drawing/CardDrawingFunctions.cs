@@ -3,16 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using MemoryCardGameGenerator.Model;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using SkiaSharp;
-using Topten.RichTextKit;
-using Path = SixLabors.ImageSharp.Drawing.Path;
 
 namespace MemoryCardGameGenerator.Drawing
 {
@@ -39,19 +30,6 @@ namespace MemoryCardGameGenerator.Drawing
             return acc;
         }
 
-
-        private static FontCollection _fontFamily = LoadChineseFonts();
-
-        public static FontCollection LoadChineseFonts()
-        {
-            FontCollection collection = new FontCollection();
-            IEnumerable<FontDescription> descriptions;
-            using (var ms = new MemoryStream(Properties.Resources.msyhbd))
-            {
-                collection.InstallCollection(ms, out descriptions);
-                return collection;
-            }
-        }
 
 
         public static void AddGridLines(int numberOfCardsPerRow, int numberOfCardsPerColumn, SKRect area, SKCanvas canvas)

@@ -1,14 +1,7 @@
 ﻿using MemoryCardGameGenerator.Drawing;
 using MemoryCardGameGenerator.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SixLabors.Fonts;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing.Processing;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using SkiaSharp;
-using System;
 using System.IO;
 using System.Linq;
 
@@ -27,30 +20,7 @@ namespace MemoryCardGameGenerator.Tests
         }
         
        
-        [TestMethod]
-        public void TestFontLoad()
-        {
-            var r = CardDrawingFunctions.LoadChineseFonts();
-            foreach (var f in r.Families)
-            {
-                System.Console.WriteLine(f.Name);
-            }
-
-        }
-
-        [TestMethod]
-        public void TestFontDraw()
-        {
-            var fonts = CardDrawingFunctions.LoadChineseFonts();
-            var font = fonts.CreateFont("Microsoft YaHei", 36, FontStyle.Bold);
-            var image = new Image<Bgr24>(200, 200);
-            image.Mutate(i => i.DrawText("hello", font, Color.Red, new Point(0, 0)));
-            using (var output = GetTestOutputDirectoryStream("testFont.png"))
-            {
-                image.Save(output, new PngEncoder());
-            }
-        }
-
+       
         [TestMethod]
         public void TestLineSpacing()
         {

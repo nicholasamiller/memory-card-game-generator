@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace MemoryCardGenerator.Shared
 {
+
     public class CardRecord
     {
         public CardDataDto CardDataDto { get; set; }
