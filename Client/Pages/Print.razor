@@ -1,5 +1,8 @@
 ﻿@page "/print"
 @using System.ComponentModel.DataAnnotations
+@using MemoryCardGenerator.Shared
+@inject ICardRepository CardRepository
+
 
 <div class="col border">
     <EditForm EditContext="@_editContext"  OnValidSubmit="@OnValidSubmit">
@@ -8,12 +11,14 @@
             <label for="numberOfCards" class="col-form-label">Number of cards per page:</label>
         </div>
         <div class="mb-3">
-            <InputRadioGroup id="numberOfCards" @bind-Value="_printRequestModel.NumberOfCardsPerPage">
-                <InputRadio Value="1" /> One<br />
-                <InputRadio Value="4" /> Four<br />
-                <InputRadio Value="4" /> <br />
+            <InputRadioGroup id="numberOfCards" @bind-Value="_printRequestModel.CardsPerPage">
+                <InputRadio Value="@CardsPerPage.One" /> One<br />
+                <InputRadio Value="@CardsPerPage.Four" /> Four<br />
+                <InputRadio Value="@CardsPerPage.Twelve" /> Twelve <br />
+                <InputRadio Value="@CardsPerPage.Twenty" /> Twenty <br />
+
             </InputRadioGroup>
-            <ValidationMessage For="@(() => _printRequestModel.NumberOfCardsPerPage)"></ValidationMessage>
+            <ValidationMessage For="@(() =>  _printRequestModel.CardsPerPage)"></ValidationMessage>
         </div>
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">Generate PDF</button>
@@ -39,13 +44,20 @@
     private class PrintRequestModel
     {
         [Required(ErrorMessage = "How many cards per page?")]
-        public string NumberOfCardsPerPage { get; set; }
+        public MemoryCardGenerator.Shared.CardsPerPage CardsPerPage { get; set; }
+
+
     }
 
     private async void OnValidSubmit()
     {
-        var numberOfCards = Convert.ToInt16(_printRequestModel.NumberOfCardsPerPage);
-         
+        var requestDto = new CardsGenerationRequestDto()
+        {
+                Cards = CardRepository.GetAllCards().ToArray(),
+                CardsPerPage = _printRequestModel.CardsPerPage,
+                Name = CardRepository.CurrentlyLoadedListName
+        };
+
     }
 
 }

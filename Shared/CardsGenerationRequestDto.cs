@@ -9,12 +9,4 @@ namespace MemoryCardGenerator.Shared
 
         public CardRecord[] Cards { get; set; }
     }
-
-    public enum CardsPerPage
-    {
-        One = 1,
-        Four = 4,
-        Twelve = 12,
-        Twenty = 20
-    }
 }
