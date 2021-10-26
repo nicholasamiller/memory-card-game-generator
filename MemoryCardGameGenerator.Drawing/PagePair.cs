@@ -34,7 +34,6 @@ namespace MemoryCardGameGenerator.Drawing
         private SKRect[,] _cardRegions;
         private List<CardPairSpec> _cards = new List<CardPairSpec>();
         private SKTypeface _boldTypeFace;
-        private SKTypeface _regularTypeFace;
         private SKTypeface _lightTypeFace;
 
         public PagePair(int numberOfColumns, int numberOfRows, TypeFacesConfig typeFacesConfig)
@@ -51,7 +50,6 @@ namespace MemoryCardGameGenerator.Drawing
             _cardRegions = GetCardRegionsByRowsThenColumns(_gridArea);
 
             _boldTypeFace = typeFacesConfig.Bold;
-            _regularTypeFace = typeFacesConfig.Regular;
             _lightTypeFace = typeFacesConfig.Light;
 
         }

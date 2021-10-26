@@ -22,8 +22,7 @@
         </div>
         <div class="mb-3">
             <button class="btn btn-primary" type="submit">Generate PDF</button>
-        </div>
-        <ValidationSummary/>
+        </div>      
     </EditForm>
 </div>
 
@@ -44,7 +43,7 @@
     private class PrintRequestModel
     {
         [Required(ErrorMessage = "How many cards per page?")]
-        public MemoryCardGenerator.Shared.CardsPerPage CardsPerPage { get; set; }
+        public MemoryCardGenerator.Shared.CardsPerPage? CardsPerPage { get; set; }
 
 
     }
@@ -54,7 +53,7 @@
         var requestDto = new CardsGenerationRequestDto()
         {
                 Cards = CardRepository.GetAllCards().ToArray(),
-                CardsPerPage = _printRequestModel.CardsPerPage,
+                CardsPerPage = _printRequestModel.CardsPerPage.Value,
                 Name = CardRepository.CurrentlyLoadedListName
         };
 
