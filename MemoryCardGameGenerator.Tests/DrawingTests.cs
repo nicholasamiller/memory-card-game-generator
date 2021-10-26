@@ -103,12 +103,11 @@ namespace MemoryCardGameGenerator.Tests
 
 
             using (var bt = new MemoryStream(Drawing.Properties.Resources.msyhbd))
-            using (var rt = new MemoryStream(Drawing.Properties.Resources.msyh))
             using (var lt = new MemoryStream(Drawing.Properties.Resources.msyhl))
             
             using (var pdfOutput = GetTestOutputDirectoryStream("Lockdown KMIP Game.pdf"))
             {
-                var typeFaces = new TypeFacesConfig(SKTypeface.FromStream(rt), SKTypeface.FromStream(bt), SKTypeface.FromStream(lt));
+                var typeFaces = new TypeFacesConfig(null, SKTypeface.FromStream(bt), SKTypeface.FromStream(lt));
                 var specs = CardsData.LoadSpecsFromString(testCardsData);
                 var ut = new PdfCardsDocument(specs, 4,typeFaces);
                 ut.Render(pdfOutput);

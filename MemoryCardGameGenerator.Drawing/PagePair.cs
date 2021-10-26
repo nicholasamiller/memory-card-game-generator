@@ -10,7 +10,7 @@ namespace MemoryCardGameGenerator.Drawing
 {
     public class TypeFacesConfig
     {
-        public TypeFacesConfig(SKTypeface regular, SKTypeface bold, SKTypeface light)
+        public TypeFacesConfig(SKTypeface regular,SKTypeface bold, SKTypeface light)
         {
             Regular = regular;
             Bold = bold;
