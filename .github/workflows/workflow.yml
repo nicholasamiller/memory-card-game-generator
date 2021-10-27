@@ -17,11 +17,14 @@ on:
 env:
   AZURE_WEBAPP_NAME: kmipcards    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'KMIPCards/Server'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '5.*'           # set this to the dot net version to use
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet: [ '3.1.x', '5.x' ]
+
     steps:
 
       # Checkout the repo
@@ -31,7 +34,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }} 
+          dotnet-version: ${{ matrix.dotnet-version }}
       
       # Run dotnet build and publish
       - name: dotnet build and publish
