@@ -63,6 +63,16 @@ namespace MemoryCardGameGenerator.Drawing.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] msyh {
+            get {
+                object obj = ResourceManager.GetObject("msyh", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] msyhbd {
             get {
                 object obj = ResourceManager.GetObject("msyhbd", resourceCulture);
