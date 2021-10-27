@@ -1,6 +1,5 @@
-﻿using MemoryCardGenerator.Shared;
+﻿using KmipCards.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
@@ -21,7 +20,7 @@ namespace MemoryCardGameGenerator.Tests
         {
             var testData = new CardDataDto() { Chinese = "太冷了"};
             var httpClient = new HttpClient();
-            var underTest = new Api.CharacterTranslateFunction(httpClient);
+            var underTest = new KmipCards.Server.CharacterTranslateFunction(httpClient);
             var result = underTest.Run(testData, null).Result as OkObjectResult;
             CardDataDto card = result.Value as CardDataDto;
             Assert.IsTrue(!String.IsNullOrWhiteSpace(card.English));
@@ -32,7 +31,7 @@ namespace MemoryCardGameGenerator.Tests
         {
             var testData = new CardDataDto() { English = "it's too cold" };
             var httpClient = new HttpClient();
-            var underTest = new Api.CharacterTranslateFunction(httpClient);
+            var underTest = new KmipCards.Server.CharacterTranslateFunction(httpClient);
             var result = underTest.Run(testData, null).Result as OkObjectResult;
             CardDataDto card = result.Value as CardDataDto;
             Assert.IsTrue(!String.IsNullOrWhiteSpace(card.Chinese));

@@ -1,0 +1,47 @@
+﻿@page "/cards"
+@using KmipCards.Shared;
+@using KmipCards.Client.Interfaces;
+@inject ICardRepository CardRepository;
+
+@*
+Component for card data form - a table
+Component can get filled from API later
+Component for list of card items
+Can search table
+When saving an entry
+Fire event on set
+Add to an injected repository
+Save Spec - in json
+Upload Spec - in json
+*@
+
+
+<table class="table">
+	<thead>
+		<tr>
+		  <th scope="col">Character</th>
+	      <th scope="col">Pinyin</th>
+		  <th scope="col">English</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var card in CardRepository.GetAllCards())
+		{
+			<tr>
+				<td>@card.CardDataDto.Chinese</td>
+				<td>@card.CardDataDto.Pinyin</td>
+				<td>@card.CardDataDto.English</td>
+			</tr>
+		}
+	</tbody>
+
+
+</table>
+
+
+
+
+@code {
+	
+
+}

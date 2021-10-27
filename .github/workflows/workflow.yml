@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '3.1.x', '5.x' ]
+        dotnet: [ '5.x' ]
 
     steps:
 

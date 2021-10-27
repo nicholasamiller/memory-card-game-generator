@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Api\Api.csproj" />
+    <ProjectReference Include="..\KmipCards\Server\KmipCards.Server.csproj" />
+    <ProjectReference Include="..\KmipCards\Shared\KmipCards.Shared.csproj" />
     <ProjectReference Include="..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj" />
     <ProjectReference Include="..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj" />
   </ItemGroup>
