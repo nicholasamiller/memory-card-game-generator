@@ -31,6 +31,8 @@ namespace KmipCards.Client
                 builder.Services.AddSingleton<ICardRepository>(_ => new CardDataRepository());
             }
 
+            builder.Services.AddBlazorDownloadFile();
+
             await builder.Build().RunAsync();
         }
 
