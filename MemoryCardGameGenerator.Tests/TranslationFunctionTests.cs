@@ -18,7 +18,7 @@ namespace MemoryCardGameGenerator.Tests
         [TestMethod]
         public void IntegrationTestChinese()
         {
-            var testData = new CardDataDto() { Chinese = "太冷了"};
+            var testData = new TranslationRequestDto() { Chinese = "太冷了"};
             var httpClient = new HttpClient();
             var underTest = new KmipCards.Server.CharacterTranslateFunction(httpClient);
             var result = underTest.Run(testData).Result as OkObjectResult;
@@ -29,7 +29,7 @@ namespace MemoryCardGameGenerator.Tests
         [TestMethod]
         public void IntegrationTestEnglish()
         {
-            var testData = new CardDataDto() { English = "it's too cold" };
+            var testData = new TranslationRequestDto() { English = "it's too cold" };
             var httpClient = new HttpClient();
             var underTest = new KmipCards.Server.CharacterTranslateFunction(httpClient);
             var result = underTest.Run(testData).Result as OkObjectResult;
