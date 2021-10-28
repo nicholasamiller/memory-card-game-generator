@@ -16,7 +16,7 @@ on:
 # 2. Change these variables for your configuration:
 env:
   AZURE_WEBAPP_NAME: kmipcards    # set this to your application's name
-  AZURE_WEBAPP_PACKAGE_PATH: 'KMIPCards/Server'      # set this to the path to your web app project, defaults to the repository root
+  AZURE_WEBAPP_PACKAGE_PATH: 'KmipCards/Server'      # set this to the path to your web app project, defaults to the repository root
 
 jobs:
   build-and-deploy:
@@ -40,7 +40,7 @@ jobs:
       - name: dotnet build and publish
         run: |
           dotnet build --configuration Release
-          dotnet publish -c Release -o myapp 
+          dotnet publish -c Release -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp
           
       # Deploy to Azure Web apps
       - name: 'Run Azure webapp deploy action using publish profile credentials'
