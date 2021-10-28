@@ -21,7 +21,7 @@ namespace MemoryCardGameGenerator.Tests
             var testData = new CardDataDto() { Chinese = "太冷了"};
             var httpClient = new HttpClient();
             var underTest = new KmipCards.Server.CharacterTranslateFunction(httpClient);
-            var result = underTest.Run(testData, null).Result as OkObjectResult;
+            var result = underTest.Run(testData).Result as OkObjectResult;
             CardDataDto card = result.Value as CardDataDto;
             Assert.IsTrue(!String.IsNullOrWhiteSpace(card.English));
         }
@@ -32,7 +32,7 @@ namespace MemoryCardGameGenerator.Tests
             var testData = new CardDataDto() { English = "it's too cold" };
             var httpClient = new HttpClient();
             var underTest = new KmipCards.Server.CharacterTranslateFunction(httpClient);
-            var result = underTest.Run(testData, null).Result as OkObjectResult;
+            var result = underTest.Run(testData).Result as OkObjectResult;
             CardDataDto card = result.Value as CardDataDto;
             Assert.IsTrue(!String.IsNullOrWhiteSpace(card.Chinese));
         }

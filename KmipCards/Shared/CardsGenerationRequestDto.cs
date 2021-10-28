@@ -1,6 +1,7 @@
 ﻿
 namespace KmipCards.Shared
 {
+
     public class CardsGenerationRequestDto
     {
         public string Name { get; set; }

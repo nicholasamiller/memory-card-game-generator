@@ -1,5 +1,6 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">KmipCards</a>
+    <a class="navbar-brand" href="">汉字卡 KMIP Cards
+    </a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,18 +9,23 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link" href="load" Match="NavLinkMatch.All">
+                <span class="oi" aria-hidden="true"></span>Load
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="cards" Match="NavLinkMatch.All">
+                <span class="oi" aria-hidden="true"></span>卡 Edit
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            <NavLink class="nav-link" href="add" Match="NavLinkMatch.All">
+                <span class="oi" aria-hidden="true"></span>添加卡 Add
+                </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="print">
+                <span class="oi" aria-hidden="true"></span>打印卡 Print
             </NavLink>
         </li>
     </ul>

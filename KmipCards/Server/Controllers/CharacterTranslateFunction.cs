@@ -89,7 +89,7 @@ namespace KmipCards.Server
             Engilsh
         };
 
-        TranslationRequestInfo DetermineTranslationParams(CardDataDto cardDataDto)
+        TranslationRequestInfo DetermineTranslationParams(TranslationRequestDto cardDataDto)
         {
             if (cardDataDto.Chinese != null)
             {
@@ -159,16 +159,16 @@ namespace KmipCards.Server
 
         }
 
-        [Route("Translate")]
+        [HttpPost("api/translate")]
         public async Task<IActionResult> Run(
-               CardDataDto cardDataDto, ILogger log)
+               TranslationRequestDto translationRequestDto)
         {       
-            if (cardDataDto.English == null && cardDataDto.Chinese == null)
+            if (translationRequestDto.English == null && translationRequestDto.Chinese == null)
             {
                 return new BadRequestResult();
             }
 
-            var translationParams = DetermineTranslationParams(cardDataDto);
+            var translationParams = DetermineTranslationParams(translationRequestDto);
 
             var targetLanguages = String.Concat(translationParams.TargetLanguages.Select(l => $"&to={l}"));
             var toScripts = String.Concat(translationParams.ToScripts.Select(l => $"&toScript={l}"));
@@ -190,9 +190,11 @@ namespace KmipCards.Server
                 string translationResult = await translationResponse.Content.ReadAsStringAsync();
                 TranslationResult[] deserializedOutput = JsonConvert.DeserializeObject<TranslationResult[]>(translationResult);
 
-                CardDataDto toReturn = PopulateCardData(cardDataDto, translationParams, deserializedOutput);
+                var cardToPopulate = new CardDataDto() { English = translationRequestDto.English, Chinese = translationRequestDto.Chinese, Pinyin = translationRequestDto.Pinyin };
+
+                CardDataDto toReturn = PopulateCardData(cardToPopulate, translationParams, deserializedOutput);
                     
-                return new OkObjectResult(cardDataDto);
+                return new OkObjectResult(toReturn);
 
             }
         }

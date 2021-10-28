@@ -20,7 +20,7 @@ namespace MemoryCardGameGenerator.Tests
 
             var httpClient = new HttpClient();
             var testRequestData = new CardsGenerationRequestDto() { Cards = new[] { testRecord },CardsPerPage = CardsPerPage.Twenty,Name = "TestGenerate" };
-            var result = CardGenerationFunction.Run(testRequestData, null).Result as FileContentResult;
+            var result = CardGenerationFunction.Run(testRequestData).Result as FileContentResult;
             
             var tempFileName = Path.GetTempFileName() + ".pdf";
             File.WriteAllBytes(tempFileName, result.FileContents);

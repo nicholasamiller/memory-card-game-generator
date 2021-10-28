@@ -77,8 +77,9 @@
                 _card.Chinese = null;
                 _card.Pinyin = null;
             }
+            var requestDto = new TranslationRequestDto() { English = _card.English, Chinese = _card.Chinese, Pinyin = _card.Pinyin }; 
 
-            var translationResponse = await _httpClient.PostAsJsonAsync("/api/Translate", _card);
+            var translationResponse = await _httpClient.PostAsJsonAsync("/api/translate", requestDto);
             translationResponse.EnsureSuccessStatusCode();
             var dtoReturned = await translationResponse.Content.ReadFromJsonAsync<CardDataDto>();
             _card = dtoReturned;

@@ -12,9 +12,9 @@ namespace KmicCards.Server
     [ApiController]
     public class CardGenerationFunction
     {
-        [Route("GenerateCards")]
+        [HttpPost("api/generateCards")]
         public static async Task<IActionResult> Run(
-            CardsGenerationRequestDto cardsGenerationRequestDto, ILogger log)
+            CardsGenerationRequestDto cardsGenerationRequestDto)
         {
 
             var specs = cardsGenerationRequestDto.Cards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
