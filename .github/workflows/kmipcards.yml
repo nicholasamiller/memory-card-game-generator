@@ -1,4 +1,12 @@
 name: Build and deploy .NET Core application to Web App kmipcards
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 env:
   AZURE_WEBAPP_NAME: kmipcards
   AZURE_WEBAPP_PACKAGE_PATH: KmipCards/Server/published
