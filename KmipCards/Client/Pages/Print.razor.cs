@@ -1,4 +1,5 @@
-﻿using KmipCards.Client.Interfaces;
+﻿using Blazor.DownloadFileFast.Interfaces;
+using KmipCards.Client.Interfaces;
 using KmipCards.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -11,6 +12,9 @@ namespace KmipCards.Client.Pages
     {
         [Inject]
         private ICardRepository CardRepository { get; set; }
+
+        [Inject]
+        public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
 
 
         private PrintRequestModel _printRequestModel;
@@ -25,8 +29,6 @@ namespace KmipCards.Client.Pages
         {
             [Required(ErrorMessage = "How many cards per page?")]
             public KmipCards.Shared.CardsPerPage? CardsPerPage { get; set; }
-
-
         }
 
         private async void OnValidSubmit()
