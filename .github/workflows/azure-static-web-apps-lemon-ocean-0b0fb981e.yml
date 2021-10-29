@@ -22,9 +22,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           # Semantic version range syntax or exact version of a dotnet version
-          dotnet-version: '6.*'
+          dotnet-version: '6.0'
+          include-prerelease: true
       - name: Install workflows
-        run: sudo dotnet workload install wasm-tools
+        run: dotnet workload install wasm-tools
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
