@@ -12,8 +12,6 @@ namespace MemoryCardGameGenerator.Drawing
     public static class Generate
     {
         
-         
-        
         
         public static void WritePdf(Stream outputStream, List<CardPairSpec> specs, int cardsPerRow)
         {

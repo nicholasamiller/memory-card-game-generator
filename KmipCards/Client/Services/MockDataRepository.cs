@@ -58,6 +58,8 @@ namespace KmipCards.Client.Services
             {
                 this.AddCard(card);
             }
+
+            this.CurrentlyLoadedListName = "mockRepo";
         }
         
     }
