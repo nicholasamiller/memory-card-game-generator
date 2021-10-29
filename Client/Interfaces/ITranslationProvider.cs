@@ -1,7 +1,7 @@
-﻿using MemoryCardGenerator.Shared;
+﻿using KmipCards.Shared;
 using System.Threading.Tasks;
 
-namespace Client.Interfaces
+namespace KmipCards.Client.Interfaces
 {
     public interface ITranslationProvider
     {

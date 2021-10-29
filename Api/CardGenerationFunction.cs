@@ -15,7 +15,7 @@ namespace Api
 {
     public static class CardGenerationFunction
     {
-        [FunctionName("GenerateCards")]
+        [FunctionName("generateCards")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] CardsGenerationRequestDto cardsGenerationRequestDto,
             ILogger log)

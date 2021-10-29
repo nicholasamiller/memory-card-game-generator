@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\MemoryCardGameGenerator.Drawing\MemoryCardGameGenerator.Drawing.csproj" />
     <ProjectReference Include="..\..\MemoryCardGameGenerator.Model\MemoryCardGameGenerator.Model.csproj" />
-    <ProjectReference Include="..\Client\KmipCards.Client.csproj" />
     <ProjectReference Include="..\Shared\KmipCards.Shared.csproj" />
   </ItemGroup>
 

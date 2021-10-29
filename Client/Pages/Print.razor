@@ -1,7 +1,8 @@
 ﻿@page "/print"
 @using System.ComponentModel.DataAnnotations
-@using MemoryCardGenerator.Shared
-@inject ICardRepository CardRepository
+@using KmipCards.Shared
+@using KmipCards.Client.Interfaces
+@using Blazor.DownloadFileFast
 
 
 <div class="col border">
@@ -26,37 +27,5 @@
     </EditForm>
 </div>
 
-//Form to set number of cards per page
-// generate file
-// download file
 
 
-@code {
-    private PrintRequestModel _printRequestModel;
-    EditContext _editContext;
-    protected override void OnInitialized()
-    {
-        _printRequestModel = new PrintRequestModel();
-        _editContext = new EditContext(_printRequestModel);
-    }
-
-    private class PrintRequestModel
-    {
-        [Required(ErrorMessage = "How many cards per page?")]
-        public MemoryCardGenerator.Shared.CardsPerPage? CardsPerPage { get; set; }
-
-
-    }
-
-    private async void OnValidSubmit()
-    {
-        var requestDto = new CardsGenerationRequestDto()
-        {
-                Cards = CardRepository.GetAllCards().ToArray(),
-                CardsPerPage = _printRequestModel.CardsPerPage.Value,
-                Name = CardRepository.CurrentlyLoadedListName
-        };
-
-    }
-
-}

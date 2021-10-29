@@ -1,10 +1,11 @@
-﻿using MemoryCardGenerator.Shared;
+﻿using KmipCards.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using KmipCards.Client.Interfaces;
 
-namespace Client.Services
+namespace KmipCards.Client.Services
 {
     public class CardDataRepository : ICardRepository
     {

@@ -1,7 +1,6 @@
-﻿using MemoryCardGenerator.Shared;
-using System.Linq;
+﻿using System.Linq;
 
-namespace Client.Services
+namespace KmipCards.Client.Services
 {
     public class MockDataRepository : CardDataRepository
     {

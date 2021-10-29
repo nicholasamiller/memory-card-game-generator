@@ -161,7 +161,7 @@ namespace Api
 
         }
 
-        [FunctionName("Translate")]
+        [FunctionName("translate")]
         public async Task<IActionResult> Run(
                [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] CardDataDto cardDataDto,
                ILogger log)

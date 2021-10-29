@@ -1,7 +1,7 @@
-﻿using MemoryCardGenerator.Shared;
+﻿using KmipCards.Shared;
 using System.Collections.Generic;
 
-namespace Client
+namespace KmipCards.Client.Interfaces
 {
     public interface ICardRepository
     {
