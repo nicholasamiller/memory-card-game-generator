@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-[assembly: FunctionsStartup(typeof(Api.Startup))]
+[assembly: FunctionsStartup(typeof(KmipCardsApi.Startup))]
 
-namespace Api
+namespace KmipCardsApi
 {
     public class Startup : FunctionsStartup
     {

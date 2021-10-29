@@ -7,11 +7,11 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using MemoryCardGenerator.Shared;
 using System.Linq;
 using MemoryCardGameGenerator.Model;
+using KmipCards.Shared;
 
-namespace Api
+namespace KmipCards.Api
 {
     public static class CardGenerationFunction
     {

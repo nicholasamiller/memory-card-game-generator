@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KmipCards.Server", "KmipCar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KmipCards.Shared", "KmipCards\Shared\KmipCards.Shared.csproj", "{A7D7E0B0-0BCE-47B4-84FE-34550019350D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{68057933-3B79-47F3-891B-325751B2BB03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KmipCards.Api", "Api\KmipCards.Api.csproj", "{68057933-3B79-47F3-891B-325751B2BB03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KmipCards.Client", "KmipCards\Client\KmipCards.Client.csproj", "{AE21A971-C302-4017-B11E-9F68507C6CD7}"
 EndProject
