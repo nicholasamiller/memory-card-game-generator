@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using KmipCards.Client.Interfaces;
 using KmipCards.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -32,6 +33,7 @@ namespace KmipCards.Client
             }
 
             builder.Services.AddBlazorDownloadFile();
+            builder.Services.AddBlazoredLocalStorage();
 
             await builder.Build().RunAsync();
         }

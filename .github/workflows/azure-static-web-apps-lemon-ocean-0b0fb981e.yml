@@ -10,21 +10,39 @@ on:
       - main
 
 jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
-    runs-on: ubuntu-latest
-    name: Build and Deploy Job
+  build_job:
+    runs-on: windows-latest
+    name: Build Job
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Setup .NET 
-        uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v1
         with:
-          # Semantic version range syntax or exact version of a dotnet version
-          dotnet-version: '6.0.100-rc.2.21505.57'
-      - name: Install workflows
-        run: dotnet workload install wasm-tools
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+      - run: |
+          cd KmipCards/Client
+          dotnet --version
+          dotnet workload install wasm-tools
+          dotnet publish -c Release -o out
+      - uses: actions/upload-artifact@v2
+        with:
+          name: out
+          path: KmipCards/Client/out
+    
+  deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    needs: build_job
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: out
+          path: clientBuildToDeploy
+      - run: 
+          ls -la
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -34,7 +52,7 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "KmipCards/Client" # App source code path
+          app_location: "clientBuildToDeploy" # App source code path
           api_location: "KmipCards/Api" # Api source code path - optional
           output_location: "wwwroot" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
