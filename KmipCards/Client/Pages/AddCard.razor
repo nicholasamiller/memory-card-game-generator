@@ -7,7 +7,7 @@
 <EditForm OnValidSubmit="Submit" Model="@_card">
      <DataAnnotationsValidator />
   <div class="mb-3">
-    <label for="chinese" class="col-form-label">汉字 Chinese Character(s)</label>
+    <label for="chinese" class="col-form-label">Chinese Character(s)</label>
      <div class="mb-3 input-group">
         <InputText @bind-Value=_card.Chinese class=form-control id=chinese/>
         <button class="btn btn-outline-secondary" type="button" @onclick="@OnTranslationRequestedChinese">Translate</button>
@@ -15,12 +15,12 @@
     </div>
   </div>
   <div class="mb-3">
-    <label for="pinyin" class="form-label">拼音 Pinyin</label>
+    <label for="pinyin" class="form-label">Pinyin</label>
     <InputText @bind-Value=_card.Pinyin class=form-control id=pinyin/>
         <ValidationMessage For="@(() => _card.Pinyin)"/>
   </div>
   <div class="mb-3">
-    <label for="english" class="form-label">英语 English</label>
+    <label for="english" class="form-label">English</label>
    <div class="mb-3 input-group">
        <InputText @bind-Value=_card.English class="form-control" id="english"></InputText>
         <button class="btn btn-outline-secondary" type="button" @onclick="@OnTranslationRequestedEnglish">Translate</button>
@@ -38,7 +38,7 @@
   
   <div>
 
-  <button type="submit" class="btn btn-primary">提交 Add</button>
+  <button type="submit" class="btn btn-primary">Add</button>
   </div>
 </EditForm>
 
