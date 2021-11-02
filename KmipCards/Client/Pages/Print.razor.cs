@@ -4,6 +4,7 @@ using KmipCards.Shared;
 using MemoryCardGameGenerator.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace KmipCards.Client.Pages
         [Inject]
         public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
 
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
 
         private PrintRequestModel _printRequestModel;
         EditContext _editContext;
@@ -49,10 +52,15 @@ namespace KmipCards.Client.Pages
             using (var ms = new MemoryStream())
             {
                 MemoryCardGameGenerator.Drawing.Generate.WritePdf(ms, specs, ConvertNumberOfCardsToCardsPerRow(requestDto.CardsPerPage));
-                await BlazorDownloadFileService.DownloadFileAsync(name, ms.ToArray());      
-                
+
+                await JSRuntime.InvokeVoidAsync("downloadFromByteArray",
+                new
+                {
+                    ByteArray = ms.ToArray(),
+                    FileName = name,
+                    ContentType = "application/pdf"
+                });
             }
-            
 
         }
 
