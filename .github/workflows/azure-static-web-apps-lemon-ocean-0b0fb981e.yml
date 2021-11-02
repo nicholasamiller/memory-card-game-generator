@@ -30,6 +30,7 @@ jobs:
         with:
           name: out
           path: KmipCards/Client/out
+          retention-days: 1
     
   deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
