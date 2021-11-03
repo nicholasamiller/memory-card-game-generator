@@ -1,5 +1,4 @@
-﻿using Blazor.DownloadFileFast.Interfaces;
-using KmipCards.Client.Interfaces;
+﻿using KmipCards.Client.Interfaces;
 using KmipCards.Shared;
 using MemoryCardGameGenerator.Model;
 using Microsoft.AspNetCore.Components;
@@ -17,8 +16,6 @@ namespace KmipCards.Client.Pages
         [Inject]
         private ICardRepository CardRepository { get; set; }
 
-        [Inject]
-        public IBlazorDownloadFileService BlazorDownloadFileService { get; set; }
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }

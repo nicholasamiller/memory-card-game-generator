@@ -21,7 +21,8 @@ namespace KmipCards.Client.Services
         
         public void AddCard(CardRecord cardRecord)
         {
-            _cards.Add(cardRecord);
+            if (!_cards.Contains(cardRecord))
+                _cards.Add(cardRecord);
         }
 
         public IList<CardRecord> GetAllCards()

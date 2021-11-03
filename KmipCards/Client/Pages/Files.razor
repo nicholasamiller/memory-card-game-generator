@@ -118,7 +118,10 @@
 
 	private void LoadToRepo()
 	{
-		CardRepository.RemoveAllCards();
+		if (loadCharactersModel.LoadIntention == "Replace")
+		{
+			CardRepository.RemoveAllCards();
+		}
 		foreach (var card in loadCharactersModel.ParsedCards)
 		{
 			CardRepository.AddCard(card);

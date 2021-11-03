@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System;
 
 namespace KmipCards.Shared
 {
@@ -25,5 +26,16 @@ namespace KmipCards.Shared
             return null;
             
         }
-    }
+
+		public override bool Equals(object obj)
+		{
+            return obj is CardRecord record &&
+                   EqualityComparer<CardDataDto>.Default.Equals(CardDataDto, record.CardDataDto);				   
+		}
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(CardDataDto, Tags);
+		}
+	}
 }
