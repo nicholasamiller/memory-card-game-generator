@@ -1,8 +1,10 @@
-﻿@page "/add"
-@using KmipCards.Shared
+﻿@using KmipCards.Shared
 @using KmipCards.Client.Interfaces;
-@inject ICardRepository CardRepository
 @inject HttpClient _httpClient;
+
+<MudDialog>
+    <DialogContent>
+  
 
 <EditForm OnValidSubmit="Submit" Model="@_card">
      <DataAnnotationsValidator />
@@ -26,12 +28,23 @@
         <button class="btn btn-outline-secondary" type="button" @onclick="@OnTranslationRequestedEnglish">Translate</button>
        <ValidationMessage For="@(() => _card.English)"/>
    </div>
-   </div>
     
 
-</EditForm>
+  </div>
+  
+ </EditForm>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
 
 @code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void Cancel() => MudDialog.Cancel();
 
     CardDataDto _card = new CardDataDto();
     string _tags = String.Empty;
@@ -82,12 +95,11 @@
 
     }
 
-	private void Submit()
-	{
+    private void Submit()
+    {
         var tags = _tags.Split(",").Select(t => t.Trim()).ToArray();
-        CardRepository.AddCard(new CardRecord() { CardDataDto = _card, Tags = tags });
-        _card = new CardDataDto();
-        StateHasChanged();
+        var cardToReturn = new CardRecord() { CardDataDto = _card, Tags = tags };
+        MudDialog.Close(DialogResult.Ok<CardRecord>(cardToReturn));
     }
 
 }

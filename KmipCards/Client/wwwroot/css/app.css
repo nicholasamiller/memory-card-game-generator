@@ -48,3 +48,17 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+
+.kmipCardsBottomToolbar {
+    position: fixed !important;
+    bottom: 0 !important;
+    width: 100%;
+    background-color: #26A69A
+}
+
+.mud-main-content {
+    padding-bottom: 56px;
+}
+
+
