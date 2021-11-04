@@ -1,4 +1,5 @@
 ﻿using KmipCards.Shared;
+using System;
 using System.Collections.Generic;
 
 namespace KmipCards.Client.Interfaces
@@ -10,6 +11,8 @@ namespace KmipCards.Client.Interfaces
         IList<CardRecord> GetAllCards();
         void RemoveAllCards();
         string CurrentlyLoadedListName { get; set; }
+
+        event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
 
     }
 }

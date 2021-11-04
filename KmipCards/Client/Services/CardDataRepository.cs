@@ -12,6 +12,13 @@ namespace KmipCards.Client.Services
         private List<CardRecord> _cards;
 
         private string _currentlyLoadedListName;
+
+        public event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
+        protected virtual void OnRepositoryChanged(CardRepositoryChangedEventArgs args)
+        {
+            RepositoryChanged?.Invoke(this, args);
+        }
+
         public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
 
         public CardDataRepository()
