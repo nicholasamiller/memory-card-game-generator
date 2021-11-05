@@ -2,18 +2,6 @@
 @using KmipCards.Client.Interfaces;
 @inject ICardRepository CardRepository;
 
-@*
-Component for card data form - a table
-Component can get filled from API later
-Component for list of card items
-Can search table
-When saving an entry
-Fire event on set
-Add to an injected repository
-Save Spec - in json
-Upload Spec - in json
-*@
-
 
 <table class="table">
 	<thead>
@@ -41,6 +29,11 @@ Upload Spec - in json
 
 
 @code {
-	
+	protected override void OnInitialized()
+	{
+		CardRepository.RepositoryChanged += (sender,args) => StateHasChanged();
+		base.OnInitialized();
+
+	}
 
 }

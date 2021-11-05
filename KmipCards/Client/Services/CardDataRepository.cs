@@ -14,7 +14,8 @@ namespace KmipCards.Client.Services
         private string _currentlyLoadedListName;
 
         public event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
-        protected virtual void OnRepositoryChanged(CardRepositoryChangedEventArgs args)
+
+        public virtual void OnRepositoryChanged(CardRepositoryChangedEventArgs args)
         {
             RepositoryChanged?.Invoke(this, args);
         }

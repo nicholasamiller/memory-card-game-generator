@@ -29,6 +29,7 @@ namespace KmipCards.Client.Toolbar
             {
                 CardRepository.AddCard(cardData);
             }
+            CardRepository.OnRepositoryChanged(null);
             
         }
 
