@@ -22,7 +22,7 @@ namespace KmipCards.Client.Toolbar
 
         private async Task OpenAddDialog()
         {
-            var addCardDialog = DialogService.Show<AddCharacterDialog>("Add Character",maxWidth);
+            var addCardDialog = DialogService.Show<AddCharacterDialog>("Add Card",maxWidth);
             var result = await addCardDialog.Result;
             var cardData = result.Data as CardRecord;
             if (cardData != null)
