@@ -7,6 +7,8 @@ namespace KmipCards.Shared
 {
     public class CardDataDto
     {
+        
+        
         [Required]
         [StringLength(6, ErrorMessage = "Six characters maximum.")]
         public string Chinese { get; set;  }

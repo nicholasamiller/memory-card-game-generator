@@ -2,38 +2,79 @@
 @using KmipCards.Client.Interfaces;
 @inject ICardRepository CardRepository;
 
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
 
-<table class="table">
-	<thead>
-		<tr>
-		  <th scope="col">Character</th>
-	      <th scope="col">Pinyin</th>
-		  <th scope="col">English</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var card in CardRepository.GetAllCards())
-		{
-			<tr>
-				<td>@card.CardDataDto.Chinese</td>
-				<td>@card.CardDataDto.Pinyin</td>
-				<td>@card.CardDataDto.English</td>
-			</tr>
-		}
-	</tbody>
+        .selected > td {
+            color: white !important;
+        }
 
-
-</table>
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
 
 
 
+
+<MudTable Breakpoint="Breakpoint.Xxl" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@CardRepository.GetAllCards()  
+  T="CardRecord">
+	<HeaderContent>
+		<MudTh>Characters</MudTh>
+		<MudTh>Pinyin</MudTh>
+		<MudTh>English</MudTh>
+	</HeaderContent>
+	<RowTemplate>
+		<MudTd DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
+		<MudTd DataLabel="Pinyin">@context.CardDataDto.Pinyin</MudTd>
+		<MudTd DataLabel="English">@context.CardDataDto.English</MudTd>
+	</RowTemplate>	
+</MudTable>
+ 
 
 @code {
+	private MudTable<CardRecord> mudTable;
+	private CardRecord _currentlySelectedRecord;
+	private int selectedRowNumber = -1;
+
+
 	protected override void OnInitialized()
 	{
-		CardRepository.RepositoryChanged += (sender,args) => StateHasChanged();
-		base.OnInitialized();
+		CardRepository.RepositoryChanged += (sender, args) =>
+		{
+			StateHasChanged();
 
+		};
+		base.OnInitialized();
+		
 	}
+
+	private void RowClickEvent(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
+    {
+    }
+
+	private string SelectedRowClassFunc(CardRecord record, int rowNumber)
+	{
+
+		// deselect
+		if (selectedRowNumber == rowNumber)
+		{
+			selectedRowNumber = -1;
+			return string.Empty;
+		}
+		else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(record))
+		{
+			selectedRowNumber = rowNumber;
+			_currentlySelectedRecord = record;
+			return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+	}
+
 
 }

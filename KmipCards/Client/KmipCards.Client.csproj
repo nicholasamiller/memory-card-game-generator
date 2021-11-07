@@ -8,10 +8,11 @@
 	<ItemGroup>
 		<PackageReference Include="BlazorDownloadFileFast" Version="0.0.4" />
 		<PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+		<PackageReference Include="FluentValidation" Version="10.3.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0-rc.2.21480.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.0-rc.2.21480.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.0-rc.2.21480.10" PrivateAssets="all" />
-		<PackageReference Include="MudBlazor" Version="5.2.0" />
+		<PackageReference Include="MudBlazor" Version="5.1.5" />
 		<PackageReference Include="SkiaSharp.Views.Blazor" Version="2.88.0-preview.152" />
 		<PackageReference Include="System.Net.Http.Json" Version="6.0.0-rc.2.21480.5" />
 	</ItemGroup>

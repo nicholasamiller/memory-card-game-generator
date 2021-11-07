@@ -1,25 +1,24 @@
 ﻿@using KmipCards.Shared
 @using KmipCards.Client.Interfaces;
+@using FluentValidation;
 @inject HttpClient _httpClient;
+
 
 <MudDialog>
     <DialogContent>
 
-<EditForm OnValidSubmit="Submit" Model="@_card">
-     <DataAnnotationsValidator />
-
+<MudForm Model="@_card" @ref="@form">
      <div class="input-group">
-        <MudTextField Label="Chinese Characters" @bind-Value=_card.Chinese id="chinese" For="@(() => _card.Chinese)"/>
+        <MudTextField Label="Chinese Characters" @bind-Value=_card.CardDataDto.Chinese id="chinese" Immediate="true"  Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Chinese)"/>
         <MudButton  @onclick="@OnTranslationRequestedChinese">Translate</MudButton>
     </div>
-     <MudTextField Label="Pinyin" @bind-Value=_card.Pinyin For="@(() => _card.Pinyin)"/>
+     <MudTextField Label="Pinyin" @bind-Value=_card.CardDataDto.Pinyin Immediate="true" Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Pinyin)"/>
    <div class="input-group">
-      <MudTextField Label="English" @bind-Value=_card.English/>
+      <MudTextField Label="English" @bind-Value=_card.CardDataDto.English Immediate="true" Validation="@(newCardValidator.ValidateValue)"  For="@(() => _card.CardDataDto.English)" />
       <MudButton @onclick="@OnTranslationRequestedEnglish">Translate</MudButton>
     </div>
-        
   
- </EditForm>
+ </MudForm>
 
     </DialogContent>
     <DialogActions>
@@ -30,11 +29,18 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    MudForm form;
+    NewCardValidator newCardValidator;
+
+    protected override void OnInitialized()
+    {
+        newCardValidator = new NewCardValidator();
+        base.OnInitialized();
+    }
 
     void Cancel() => MudDialog.Cancel();
 
-    CardDataDto _card = new CardDataDto();
-    string _tags = String.Empty;
+    CardRecord _card = new CardRecord() { CardDataDto = new CardDataDto() };
 
     private enum TranslationSource {
         Chinese,
@@ -58,35 +64,76 @@
             if (translationSource == TranslationSource.Chinese)
             {
                 // clear pinyin and english
-                _card.English = null;
-                _card.Pinyin = null;
+                _card.CardDataDto.English = null;
+                _card.CardDataDto.Pinyin = null;
             }
             else if (translationSource == TranslationSource.English)
             {
-                _card.Chinese = null;
-                _card.Pinyin = null;
+                _card.CardDataDto.Chinese = null;
+                _card.CardDataDto.Pinyin = null;
             }
-            var requestDto = new TranslationRequestDto() { English = _card.English, Chinese = _card.Chinese, Pinyin = _card.Pinyin }; 
+            var requestDto = new TranslationRequestDto() { English = _card.CardDataDto.English, Chinese = _card.CardDataDto.Chinese, Pinyin = _card.CardDataDto.Pinyin }; 
 
             var translationResponse = await _httpClient.PostAsJsonAsync("/api/translate", requestDto);
             translationResponse.EnsureSuccessStatusCode();
             var dtoReturned = await translationResponse.Content.ReadFromJsonAsync<CardDataDto>();
-            _card = dtoReturned;
+            _card = new CardRecord() { CardDataDto = dtoReturned };
             StateHasChanged();
+            await form.Validate();
 
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
         }
+    }
+
+    public class NewCardValidator : AbstractValidator<CardRecord>
+    {
+        public NewCardValidator()
+        {
+            RuleFor(x => x.CardDataDto.Chinese)
+            .NotNull()
+            .WithMessage("Required")
+            .NotEmpty()
+            .WithMessage("Required");
+
+            RuleFor(x => x.CardDataDto.Chinese)
+            .MaximumLength(6)
+            .WithMessage("Six characters max");
+
+            RuleFor(x => x.CardDataDto.Pinyin)
+            .NotNull()
+            .WithMessage("Required")
+            .NotEmpty()
+            .WithMessage("Required");
+
+            RuleFor(x => x.CardDataDto.English)
+            .NotNull()
+            .WithMessage("Required")
+            .NotEmpty()
+            .WithMessage("Required");
+        }
+
+        public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
+        {
+            var result = await ValidateAsync(ValidationContext<CardRecord>.CreateWithOptions((CardRecord)model, x => x.IncludeProperties(propertyName)));
+            if (result.IsValid)
+                return Array.Empty<string>();
+            return result.Errors.Select(e => e.ErrorMessage);
+        };
 
     }
 
-    private void Submit()
+    private async Task Submit()
     {
-        var tags = _tags.Split(",").Select(t => t.Trim()).ToArray();
-        var cardToReturn = new CardRecord() { CardDataDto = _card, Tags = tags };
-        MudDialog.Close(DialogResult.Ok<CardRecord>(cardToReturn));
+        await form.Validate();
+
+        if (form.IsValid)
+        {
+            var cardToReturn = _card;
+            MudDialog.Close(DialogResult.Ok<CardRecord>(cardToReturn)); 
+        }
     }
 
 }
