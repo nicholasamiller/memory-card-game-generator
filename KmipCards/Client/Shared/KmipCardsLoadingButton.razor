@@ -1,0 +1,25 @@
+﻿<MudButton Disabled="@_processing" OnClick="StartLongTask" Variant="Variant.Text" Size="Size.Small" Color="Color.Secondary">
+    @if (_processing)
+    {
+        <MudProgressCircular Class="ms-n1"  Indeterminate="true"/>
+    }
+    <MudText>@ChildContent</MudText>
+    
+</MudButton>
+
+@code {
+    bool _processing = false;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> LongTask { get; set; }
+
+    async Task StartLongTask()
+    {
+        _processing = true;
+        await LongTask.InvokeAsync();
+        _processing = false;
+    }
+}

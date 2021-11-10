@@ -10,12 +10,14 @@
 <MudForm Model="@_card" @ref="@form">
      <div class="input-group">
         <MudTextField Label="Chinese Characters" @bind-Value=_card.CardDataDto.Chinese id="chinese" Immediate="true"  Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Chinese)"/>
-        <MudButton  @onclick="@OnTranslationRequestedChinese">Translate</MudButton>
+       <KmipCardsLoadingButton LongTask=OnTranslationRequestedChinese>Translate</KmipCardsLoadingButton>
+       
     </div>
      <MudTextField Label="Pinyin" @bind-Value=_card.CardDataDto.Pinyin Immediate="true" Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Pinyin)"/>
-   <div class="input-group">
+   <div class="input-group"> 
       <MudTextField Label="English" @bind-Value=_card.CardDataDto.English Immediate="true" Validation="@(newCardValidator.ValidateValue)"  For="@(() => _card.CardDataDto.English)" />
-      <MudButton @onclick="@OnTranslationRequestedEnglish">Translate</MudButton>
+       <KmipCardsLoadingButton LongTask=OnTranslationRequestedEnglish>Translate</KmipCardsLoadingButton>
+          
     </div>
   
  </MudForm>
@@ -23,7 +25,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Cancel</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
     </DialogActions>
 </MudDialog>
 

@@ -1,0 +1,20 @@
+﻿@using KmipCards.Shared
+<MudDialog>
+	<DialogContent>
+		<MudForm Model=_printRequestModel>
+		 <MudRadioGroup @bind-SelectedOption="@_printRequestModel.CardsPerPage">
+			    <MudRadio Option="@CardsPerPage.One" /> One<br />
+                <MudRadio Option="@CardsPerPage.Four" /> Four<br />
+                <MudRadio Option="@CardsPerPage.Twelve" /> Twelve <br />
+                <MudRadio Option="@CardsPerPage.Twenty" /> Twenty <br />
+		 </MudRadioGroup>
+			
+		
+		</MudForm>
+
+	</DialogContent>
+	<DialogActions>
+			<MudButton OnClick="Cancel">Cancel</MudButton>
+			<MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="GeneratePdf">Make Cards</MudButton>
+		</DialogActions>
+</MudDialog>
