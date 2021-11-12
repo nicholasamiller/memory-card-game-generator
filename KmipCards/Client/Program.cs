@@ -26,11 +26,11 @@ namespace KmipCards.Client
 
             builder.Services.AddBlazoredLocalStorage();
             var localStorageService = builder.Services.BuildServiceProvider().GetService<ILocalStorageService>();
-            if (builder.HostEnvironment.IsDevelopment())
-            {
-                builder.Services.AddSingleton<ICardRepository>(_ => new MockDataRepository(localStorageService));
-            }
-            else
+            //if (builder.HostEnvironment.IsDevelopment())
+            //{
+            //    builder.Services.AddSingleton<ICardRepository>(_ => new MockDataRepository(localStorageService));
+            //}
+            //else
             {
                 builder.Services.AddSingleton<ICardRepository>(_ => new CardDataRepository(localStorageService));
             }
