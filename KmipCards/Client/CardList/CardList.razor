@@ -48,8 +48,8 @@
 			StateHasChanged();
 
 		};
+		await CardRepository.LoadSetFromLocalStorage();
 		_cards = await CardRepository.GetAllCards();
-
 		await base.OnInitializedAsync();
 	}
 

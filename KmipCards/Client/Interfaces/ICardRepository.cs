@@ -12,6 +12,7 @@ namespace KmipCards.Client.Interfaces
         Task<List<CardRecord>> GetAllCards();
         Task RemoveAllCards();
         void OnRepositoryChanged(CardRepositoryChangedEventArgs args);
+        Task LoadSetFromLocalStorage();
 
         string CurrentlyLoadedListName { get; set; }
 

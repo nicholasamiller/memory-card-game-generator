@@ -25,13 +25,16 @@ namespace KmipCards.Client.Services
         
         public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
         
-
-        private async Task LoadSetFromLocalStorage()
+        
+        public async Task LoadSetFromLocalStorage()
         {
             var setString = await _localStorageService.GetItemAsStringAsync(CURRENT_LOCAL_STORAGE_SET_NAME);
-            var cardRecords = ParseFromTextLines(setString);
-            _cards = cardRecords;
-            OnRepositoryChanged(null);
+            if (setString != null)
+            {
+                var cardRecords = ParseFromTextLines(setString);
+                _cards = cardRecords;
+                OnRepositoryChanged(null);
+            }
         }
         
         private async Task SaveSetToLocalStorage()
@@ -42,9 +45,9 @@ namespace KmipCards.Client.Services
 
         public CardDataRepository(ILocalStorageService localStorageService)
         {
-            _cards = new List<CardRecord>();
             _localStorageService = localStorageService;
         }
+
         
         public async Task AddCard(CardRecord cardRecord)
         {
