@@ -9,7 +9,7 @@ namespace KmipCards.Client.Toolbar
 {
     public partial class KmipCardsToolbar
     {
-        DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Large, FullWidth = true };
+        DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
 
 
@@ -27,10 +27,13 @@ namespace KmipCards.Client.Toolbar
             var cardData = result.Data as CardRecord;
             if (cardData != null)
             {
-                CardRepository.AddCard(cardData);
+                await CardRepository.AddCard(cardData);
             }
-            CardRepository.OnRepositoryChanged(null);
-            
+        }
+
+        private void OpenPrintDialog()
+        {
+            DialogService.Show<PrintDialog>("Make Printable Cards", maxWidth);
         }
 
     }

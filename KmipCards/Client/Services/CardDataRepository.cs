@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using KmipCards.Client.Interfaces;
+using Blazored.LocalStorage;
+using System.Threading.Tasks;
 
 namespace KmipCards.Client.Services
 {
     public class CardDataRepository : ICardRepository
     {
+        private const string CURRENT_LOCAL_STORAGE_SET_NAME = "CURRENT_CARDS";
         private List<CardRecord> _cards;
-
+        private ILocalStorageService _localStorageService;
         private string _currentlyLoadedListName;
 
         public event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
@@ -19,28 +22,48 @@ namespace KmipCards.Client.Services
         {
             RepositoryChanged?.Invoke(this, args);
         }
-
+        
         public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
+        
 
-        public CardDataRepository()
+        private async Task LoadSetFromLocalStorage()
         {
-            _cards = new List<CardRecord>();
+            var setString = await _localStorageService.GetItemAsStringAsync(CURRENT_LOCAL_STORAGE_SET_NAME);
+            var cardRecords = ParseFromTextLines(setString);
+            _cards = cardRecords;
+            OnRepositoryChanged(null);
         }
         
-        public void AddCard(CardRecord cardRecord)
+        private async Task SaveSetToLocalStorage()
+        {
+            var setString = RenderToLines(_cards);
+            await _localStorageService.SetItemAsStringAsync(CURRENT_LOCAL_STORAGE_SET_NAME, setString);
+        }
+
+        public CardDataRepository(ILocalStorageService localStorageService)
+        {
+            _cards = new List<CardRecord>();
+            _localStorageService = localStorageService;
+        }
+        
+        public async Task AddCard(CardRecord cardRecord)
         {
             if (!_cards.Contains(cardRecord))
                 _cards.Add(cardRecord);
+            await SaveSetToLocalStorage();
+            OnRepositoryChanged(null);
         }
 
-        public IList<CardRecord> GetAllCards()
+        public Task<List<CardRecord>> GetAllCards()
         {
-            return _cards;
+            return Task.FromResult(_cards);
         }
 
-        public void RemoveCard(CardRecord cardRecord)
+        public Task RemoveCard(CardRecord cardRecord)
         {
             _cards.Remove(cardRecord);
+            OnRepositoryChanged(null);
+            return Task.CompletedTask;
         }
         
         public static CardRecord ParseFromLine(string line)
@@ -68,10 +91,12 @@ namespace KmipCards.Client.Services
             return sb.ToString();
         }
 
-        public void RemoveAllCards()
+        public Task RemoveAllCards()
         {
             _cards = new List<CardRecord>();
+            OnRepositoryChanged(null);
+            return Task.CompletedTask; 
         }
 
-    }
+          }
 }

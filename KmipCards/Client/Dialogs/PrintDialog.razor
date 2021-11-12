@@ -1,20 +1,41 @@
 ﻿@using KmipCards.Shared
 <MudDialog>
 	<DialogContent>
-		<MudForm Model=_printRequestModel>
-		 <MudRadioGroup @bind-SelectedOption="@_printRequestModel.CardsPerPage">
-			    <MudRadio Option="@CardsPerPage.One" /> One<br />
-                <MudRadio Option="@CardsPerPage.Four" /> Four<br />
-                <MudRadio Option="@CardsPerPage.Twelve" /> Twelve <br />
-                <MudRadio Option="@CardsPerPage.Twenty" /> Twenty <br />
-		 </MudRadioGroup>
-			
-		
+		<MudForm Model=_cardsPerPage>
+			<MudField Label="How many cards per page?">
+			 <MudRadioGroup  @bind-SelectedOption="@_cardsPerPage"
+			 
+			 >
+			    <MudRadio Option="@(CardsPerPage.One)"/>One<br />
+                <MudRadio Option="@(CardsPerPage.Four)"/>Four<br />
+                <MudRadio Option="@(CardsPerPage.Twelve)"/>Twelve <br />
+                <MudRadio Option="@(CardsPerPage.Twenty)"/>Twenty <br />
+			 </MudRadioGroup>
+			</MudField>
 		</MudForm>
-
 	</DialogContent>
 	<DialogActions>
 			<MudButton OnClick="Cancel">Cancel</MudButton>
-			<MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="GeneratePdf">Make Cards</MudButton>
+			<MudButton Disabled=@_processing Color="Color.Primary" OnClick=@StartGeneratePdf>
+		    @if (_processing)
+			{
+				<MudProgressCircular Size=@Size.Small Class="ms-n1"  Indeterminate="true"/>
+			}
+				
+			Make Cards
+		</MudButton>
 		</DialogActions>
 </MudDialog>
+
+@code {
+
+	private bool _processing = false;
+
+	private async Task StartGeneratePdf() {
+		_processing = true;
+		await GeneratePdf();
+		_processing = false;
+
+	}
+
+}

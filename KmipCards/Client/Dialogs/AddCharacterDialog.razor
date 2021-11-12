@@ -10,13 +10,13 @@
 <MudForm Model="@_card" @ref="@form">
      <div class="input-group">
         <MudTextField Label="Chinese Characters" @bind-Value=_card.CardDataDto.Chinese id="chinese" Immediate="true"  Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Chinese)"/>
-       <KmipCardsLoadingButton LongTask=OnTranslationRequestedChinese>Translate</KmipCardsLoadingButton>
+       <KmipCardsSecondaryLoadingButton LongTask=OnTranslationRequestedChinese>Translate</KmipCardsSecondaryLoadingButton>
        
     </div>
      <MudTextField Label="Pinyin" @bind-Value=_card.CardDataDto.Pinyin Immediate="true" Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Pinyin)"/>
    <div class="input-group"> 
       <MudTextField Label="English" @bind-Value=_card.CardDataDto.English Immediate="true" Validation="@(newCardValidator.ValidateValue)"  For="@(() => _card.CardDataDto.English)" />
-       <KmipCardsLoadingButton LongTask=OnTranslationRequestedEnglish>Translate</KmipCardsLoadingButton>
+       <KmipCardsSecondaryLoadingButton LongTask=OnTranslationRequestedEnglish>Translate</KmipCardsSecondaryLoadingButton>
           
     </div>
   

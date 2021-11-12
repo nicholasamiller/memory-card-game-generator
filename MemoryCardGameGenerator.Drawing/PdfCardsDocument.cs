@@ -59,9 +59,6 @@ namespace MemoryCardGameGenerator.Drawing
                 }
                 pagePairs.Add(pp);
             }
-            // add empty one at end
-            pagePairs.Add(new PagePair(cardNumberData.CardsPerRow,cardNumberData.NumberOfRows, typeFacesConfig));
-            
             _pagePairs = pagePairs;
 
             this._typeFacesConfig = typeFacesConfig;

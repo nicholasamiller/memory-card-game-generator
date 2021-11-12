@@ -1,4 +1,6 @@
-﻿using KmipCards.Client.Interfaces;
+﻿using FluentValidation;
+using KmipCards.Client.Interfaces;
+using KmipCards.Client.Shared;
 using KmipCards.Shared;
 using MemoryCardGameGenerator.Model;
 using Microsoft.AspNetCore.Components;
@@ -24,38 +26,30 @@ namespace KmipCards.Client.Dialogs
 
         
         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+        
+        private enum CardsPerPage
+        {
+            One,
+            Four,
+            Twelve,
+            Twenty
+        }
 
+        private CardsPerPage _cardsPerPage = CardsPerPage.Twenty;
 
         void Cancel() => MudDialog.Cancel();
 
-        private PrintRequestModel _printRequestModel;
-        EditContext _editContext;
-        protected override void OnInitialized()
-        {
-            _printRequestModel = new PrintRequestModel();
-            _editContext = new EditContext(_printRequestModel);
-        }
-
-        private class PrintRequestModel
-        {
-            public KmipCards.Shared.CardsPerPage? CardsPerPage { get; set; }
-        }
-
         private async Task GeneratePdf()
         {
-            var requestDto = new CardsGenerationRequestDto()
-            {
-                Cards = CardRepository.GetAllCards().ToArray(),
-                CardsPerPage = _printRequestModel.CardsPerPage.Value,
-                Name = CardRepository.CurrentlyLoadedListName
-            };
 
-            var specs = requestDto.Cards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
+            var currentCards = await CardRepository.GetAllCards();
+
+            var specs = currentCards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
 
             var name = CardRepository.CurrentlyLoadedListName + ".pdf";
             using (var ms = new MemoryStream())
             {
-                MemoryCardGameGenerator.Drawing.Generate.WritePdf(ms, specs, ConvertNumberOfCardsToCardsPerRow(requestDto.CardsPerPage));
+                MemoryCardGameGenerator.Drawing.Generate.WritePdf(ms, specs, ConvertNumberOfCardsToCardsPerRow(_cardsPerPage));
 
                 await JSRuntime.InvokeVoidAsync("downloadFromByteArray",
                 new
@@ -65,8 +59,10 @@ namespace KmipCards.Client.Dialogs
                     ContentType = "application/pdf"
                 });
             }
-        }
 
+            MudDialog.Close();
+        }
+        
         private static int ConvertNumberOfCardsToCardsPerRow(CardsPerPage cardsPerPage)
         {
             switch (cardsPerPage)
@@ -78,5 +74,8 @@ namespace KmipCards.Client.Dialogs
                 default: return 4;
             }
         }
+        
+
+        
     }
 }

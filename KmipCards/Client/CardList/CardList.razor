@@ -19,7 +19,7 @@
 
 
 
-<MudTable Breakpoint="Breakpoint.Xxl" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@CardRepository.GetAllCards()  
+<MudTable Breakpoint="Breakpoint.Xxl" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@(_cards)
   T="CardRecord">
 	<HeaderContent>
 		<MudTh>Characters</MudTh>
@@ -38,19 +38,23 @@
 	private MudTable<CardRecord> mudTable;
 	private CardRecord _currentlySelectedRecord;
 	private int selectedRowNumber = -1;
+	private IEnumerable<CardRecord> _cards;
 
 
-	protected override void OnInitialized()
+	protected override async Task OnInitializedAsync()
 	{
 		CardRepository.RepositoryChanged += (sender, args) =>
 		{
 			StateHasChanged();
 
 		};
-		base.OnInitialized();
-		
+		_cards = await CardRepository.GetAllCards();
+
+		await base.OnInitializedAsync();
 	}
 
+
+	
 	private void RowClickEvent(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
     {
     }

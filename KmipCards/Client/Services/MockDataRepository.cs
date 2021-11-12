@@ -1,12 +1,18 @@
-﻿using KmipCards.Client.Services;
+﻿using Blazored.LocalStorage;
+using KmipCards.Client.Interfaces;
+using KmipCards.Client.Services;
 using KmipCards.Shared;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KmipCards.Client.Services
 {
-    public class MockDataRepository : CardDataRepository
-    {
-        public MockDataRepository()
+    public class MockDataRepository : ICardRepository
+    {   
+        private List<CardRecord> _cards = new List<CardRecord>();
+        private string _name = "mock";
+        public  MockDataRepository()
         {
             var testCardsData = @"一 (yì) one
 二 (èr) two
@@ -52,15 +58,49 @@ namespace KmipCards.Client.Services
 太热了 (tài rè le) too hot
 太冷了 (tài lěng le) too cold";
 
-            var cards = CardDataRepository.ParseFromTextLines(testCardsData);            
+            var mockCardData = CardDataRepository.ParseFromTextLines(testCardsData);            
             
-            foreach (var card in cards)
+            foreach (var card in mockCardData)
             {
                 this.AddCard(card);
             }
 
             this.CurrentlyLoadedListName = "mockRepo";
         }
-        
+
+        public string CurrentlyLoadedListName { get => _name; set => _name = value; }
+
+        public event System.EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
+
+        public Task AddCard(CardRecord cardRecord)
+        {
+            _cards.Add(cardRecord);
+            OnRepositoryChanged(null);
+            return Task.CompletedTask;
+        }
+
+        public Task<List<CardRecord>> GetAllCards()
+        {
+            return Task.FromResult(this._cards);
+        }
+
+        public virtual void OnRepositoryChanged(CardRepositoryChangedEventArgs args)
+        {
+            RepositoryChanged?.Invoke(this, args);
+        }
+
+        public Task RemoveAllCards()
+        {
+            _cards = new List<CardRecord>();
+            OnRepositoryChanged(null);
+            return Task.CompletedTask; 
+        }
+
+        public Task RemoveCard(CardRecord cardRecord)
+        {
+            _cards.Remove(cardRecord);
+            OnRepositoryChanged(null);
+            return Task.CompletedTask;
+        }
     }
 }

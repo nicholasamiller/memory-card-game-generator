@@ -6,7 +6,7 @@ namespace KmipCards.Shared
     {
         public string Name { get; set; }
 
-        public CardsPerPage CardsPerPage { get; set; }
+        public int CardsPerPage { get; set; }
 
         public CardRecord[] Cards { get; set; }
     }
