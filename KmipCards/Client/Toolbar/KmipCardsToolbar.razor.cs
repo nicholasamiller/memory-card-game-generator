@@ -3,6 +3,7 @@ using KmipCards.Client.Interfaces;
 using KmipCards.Shared;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace KmipCards.Client.Toolbar
@@ -25,6 +26,8 @@ namespace KmipCards.Client.Toolbar
             var addCardDialog = DialogService.Show<AddCharacterDialog>("Add Card",maxWidth);
             var result = await addCardDialog.Result;
             var cardData = result.Data as CardRecord;
+            if (cardData.Tags == null)
+                cardData.Tags = new List<string>();
             if (cardData != null)
             {
                 await CardRepository.AddCard(cardData);

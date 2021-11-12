@@ -12,7 +12,7 @@ namespace KmipCards.Client.Services
     public class CardDataRepository : ICardRepository
     {
         private const string CURRENT_LOCAL_STORAGE_SET_NAME = "CURRENT_CARDS";
-        private List<CardRecord> _cards;
+        protected List<CardRecord> _cards;
         private ILocalStorageService _localStorageService;
         private string _currentlyLoadedListName;
 

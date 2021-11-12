@@ -28,7 +28,7 @@ namespace KmipCards.Client
             var localStorageService = builder.Services.BuildServiceProvider().GetService<ILocalStorageService>();
             if (builder.HostEnvironment.IsDevelopment())
             {
-                builder.Services.AddSingleton<ICardRepository>(_ => new MockDataRepository());
+                builder.Services.AddSingleton<ICardRepository>(_ => new MockDataRepository(localStorageService));
             }
             else
             {
