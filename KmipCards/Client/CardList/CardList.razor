@@ -22,7 +22,7 @@
 <MudTable Breakpoint="Breakpoint.Xxl" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@(_cards) 
   T="CardRecord">
 	<RowTemplate>
-		<MudTd Class="kmipCardsListRow" DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
+		<MudTd Class="pl-6 pr-6 kmipCardsListRow" DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
 		<MudTd Class="kmipCardsListRow" DataLabel="Pinyin">@context.CardDataDto.Pinyin</MudTd>
 		<MudTd Class="kmipCardsListRow" DataLabel="English">@context.CardDataDto.English</MudTd>
 	</RowTemplate>	

@@ -52,16 +52,23 @@ a, .btn-link {
 
 .kmipCardsBottomToolbar {
     position: fixed !important;
+    padding-top: 10px;
     bottom: 0 !important;
     width: 100%;
-    background-color: #26A69A
+    background-color: #26A69A;
+
 }
+
+.kmipToolBarButton {
+    fill: white !important;
+}
+
 
 .mud-main-content {
     padding-bottom: 56px;
 }
 
 .kmipCardsListRow {
-    font-size: 1.5rem !important;
+    font-size: 1.25rem !important;
 }
 
