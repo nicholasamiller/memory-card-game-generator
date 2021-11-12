@@ -26,10 +26,10 @@ namespace KmipCards.Client.Toolbar
             var addCardDialog = DialogService.Show<AddCharacterDialog>("Add Card",maxWidth);
             var result = await addCardDialog.Result;
             var cardData = result.Data as CardRecord;
-            if (cardData.Tags == null)
-                cardData.Tags = new List<string>();
             if (cardData != null)
             {
+                if (cardData.Tags == null)
+                    cardData.Tags = new List<string>();
                 await CardRepository.AddCard(cardData);
             }
         }

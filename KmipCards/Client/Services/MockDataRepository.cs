@@ -12,7 +12,17 @@ namespace KmipCards.Client.Services
     {   
         public  MockDataRepository(ILocalStorageService localStorageService) : base(localStorageService)
         {
-            var testCardsData = @"一 (yì) one
+            this.CurrentlyLoadedListName = "mockRepo";
+        }
+
+        public async override Task InitAsync()
+        {
+
+            await base.LoadSetFromLocalStorage();
+            if (base._cards == null)
+            {
+
+                var testCardsData = @"一 (yì) one
 二 (èr) two
 三 (sān) three
 人 (rén) a person, human
@@ -56,11 +66,10 @@ namespace KmipCards.Client.Services
 太热了 (tài rè le) too hot
 太冷了 (tài lěng le) too cold";
 
-            var mockCardData = CardDataRepository.ParseFromTextLines(testCardsData);
-
-            base._cards = mockCardData;
-            
-            this.CurrentlyLoadedListName = "mockRepo";
+                var mockCardData = CardDataRepository.ParseFromTextLines(testCardsData);
+                base._cards = mockCardData;
+                OnRepositoryChanged(null);
+            }
         }
 
     }

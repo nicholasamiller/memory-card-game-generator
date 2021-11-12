@@ -19,17 +19,12 @@
 
 
 
-<MudTable Breakpoint="Breakpoint.Xxl" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@(_cards)
+<MudTable Breakpoint="Breakpoint.Xxl" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@(_cards) 
   T="CardRecord">
-	<HeaderContent>
-		<MudTh>Characters</MudTh>
-		<MudTh>Pinyin</MudTh>
-		<MudTh>English</MudTh>
-	</HeaderContent>
 	<RowTemplate>
-		<MudTd DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
-		<MudTd DataLabel="Pinyin">@context.CardDataDto.Pinyin</MudTd>
-		<MudTd DataLabel="English">@context.CardDataDto.English</MudTd>
+		<MudTd Class="kmipCardsListRow" DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
+		<MudTd Class="kmipCardsListRow" DataLabel="Pinyin">@context.CardDataDto.Pinyin</MudTd>
+		<MudTd Class="kmipCardsListRow" DataLabel="English">@context.CardDataDto.English</MudTd>
 	</RowTemplate>	
 </MudTable>
  
@@ -43,12 +38,11 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		await CardRepository.InitAsync();
 		CardRepository.RepositoryChanged += (sender, args) =>
 		{
 			StateHasChanged();
-
 		};
-		await CardRepository.LoadSetFromLocalStorage();
 		_cards = await CardRepository.GetAllCards();
 		await base.OnInitializedAsync();
 	}

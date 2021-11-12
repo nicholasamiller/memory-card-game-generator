@@ -7,13 +7,13 @@ namespace KmipCards.Client.Interfaces
 {
     public interface ICardRepository
     {
+        Task InitAsync();
         Task AddCard(CardRecord cardRecord);
         Task RemoveCard(CardRecord cardRecord);
         Task<List<CardRecord>> GetAllCards();
         Task RemoveAllCards();
         void OnRepositoryChanged(CardRepositoryChangedEventArgs args);
-        Task LoadSetFromLocalStorage();
-
+        
         string CurrentlyLoadedListName { get; set; }
 
         event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;

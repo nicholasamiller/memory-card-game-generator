@@ -101,5 +101,14 @@ namespace KmipCards.Client.Services
             return Task.CompletedTask; 
         }
 
-          }
+        public virtual async Task InitAsync()
+        {
+            await LoadSetFromLocalStorage();
+            if (_cards != null)
+            {
+                _cards = new List<CardRecord>();
+                OnRepositoryChanged(null);
+            }
+        }
+    }
 }
