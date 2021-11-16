@@ -13,6 +13,14 @@ namespace MemoryCardGameGenerator.Drawing
     {
         
         
+        public static async Task WritePdfAsync(Stream outputStream, List<CardPairSpec> specs, int cardsPerRow)
+        {
+            await Task.Run(() =>
+            {
+                WritePdf(outputStream, specs, cardsPerRow);
+            });
+        }
+
         public static void WritePdf(Stream outputStream, List<CardPairSpec> specs, int cardsPerRow)
         {
             

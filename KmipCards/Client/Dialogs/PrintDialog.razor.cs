@@ -14,8 +14,15 @@ using System.Threading.Tasks;
 
 namespace KmipCards.Client.Dialogs
 {
-    public partial class PrintDialog
+    public partial class PrintDialog : ComponentBase
     {
+        private bool _processing = false;
+        private async Task StartGeneratePdf()
+        {
+            _processing = true;
+            await GeneratePdf();
+            _processing = false;
+        }
 
         [Inject]
         private ICardRepository CardRepository { get; set; }
@@ -47,14 +54,14 @@ namespace KmipCards.Client.Dialogs
             var specs = currentCards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
 
             var name = CardRepository.CurrentlyLoadedListName + ".pdf";
-            using (var ms = new MemoryStream())
+            using (var outputStream = new MemoryStream())
             {
-                MemoryCardGameGenerator.Drawing.Generate.WritePdf(ms, specs, ConvertNumberOfCardsToCardsPerRow(_cardsPerPage));
+                await MemoryCardGameGenerator.Drawing.Generate.WritePdfAsync(outputStream, specs, ConvertNumberOfCardsToCardsPerRow(_cardsPerPage));
 
                 await JSRuntime.InvokeVoidAsync("downloadFromByteArray",
                 new
                 {
-                    ByteArray = ms.ToArray(),
+                    ByteArray = outputStream.ToArray(),
                     FileName = name,
                     ContentType = "application/pdf"
                 });

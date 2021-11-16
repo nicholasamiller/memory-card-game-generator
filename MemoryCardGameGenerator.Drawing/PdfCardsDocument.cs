@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using MemoryCardGameGenerator.Model;
 using SkiaSharp;
+using System.Threading.Tasks;
 
 namespace MemoryCardGameGenerator.Drawing
 {

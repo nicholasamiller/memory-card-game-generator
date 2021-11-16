@@ -27,15 +27,3 @@
 		</DialogActions>
 </MudDialog>
 
-@code {
-
-	private bool _processing = false;
-
-	private async Task StartGeneratePdf() {
-		_processing = true;
-		await GeneratePdf();
-		_processing = false;
-
-	}
-
-}
