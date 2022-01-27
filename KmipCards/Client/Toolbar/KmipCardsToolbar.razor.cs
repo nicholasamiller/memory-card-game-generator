@@ -19,7 +19,7 @@ namespace KmipCards.Client.Toolbar
         IDialogService DialogService { get; set; }
 
         [Inject]
-        ICardRepository CardRepository { get; set; }
+        ICardDataViewModel CardRepository { get; set; }
 
         private async Task OpenAddDialog()
         {

@@ -31,7 +31,6 @@ namespace MemoryCardGameGenerator.Drawing
         }
 
 
-
         public static void AddGridLines(int numberOfCardsPerRow, int numberOfCardsPerColumn, SKRect area, SKCanvas canvas)
         {
             var cardSize = area.Width / numberOfCardsPerRow;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KmipCards.Client.Services
 {
-    public class MockDataRepository : CardDataRepository
+    public class MockDataRepository : CardDataViewModel
     {   
         public  MockDataRepository(ILocalStorageService localStorageService) : base(localStorageService)
         {
@@ -66,7 +66,7 @@ namespace KmipCards.Client.Services
 太热了 (tài rè le) too hot
 太冷了 (tài lěng le) too cold";
 
-                var mockCardData = CardDataRepository.ParseFromTextLines(testCardsData);
+                var mockCardData = CardDataViewModel.ParseFromTextLines(testCardsData);
                 base._cards = mockCardData;
                 OnRepositoryChanged(null);
             }

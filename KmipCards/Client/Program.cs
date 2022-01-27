@@ -32,7 +32,7 @@ namespace KmipCards.Client
             //}
             //else
             {
-                builder.Services.AddSingleton<ICardRepository>(_ => new CardDataRepository(localStorageService));
+                builder.Services.AddSingleton((Func<IServiceProvider, Interfaces.ICardDataViewModel>)(_ => new Services.CardDataViewModel(localStorageService)));
             }
 
             builder.Services.AddMudServices();

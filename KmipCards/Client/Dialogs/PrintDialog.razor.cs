@@ -25,7 +25,7 @@ namespace KmipCards.Client.Dialogs
         }
 
         [Inject]
-        private ICardRepository CardRepository { get; set; }
+        private ICardDataViewModel CardRepository { get; set; }
 
 
         [Inject]

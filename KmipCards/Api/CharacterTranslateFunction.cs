@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace KmipCards.Api
 {
+
     public class CharacterTranslateFunction
     {
         public class TranslationResult

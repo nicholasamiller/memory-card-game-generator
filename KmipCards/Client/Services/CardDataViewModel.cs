@@ -9,9 +9,12 @@ using System.Threading.Tasks;
 
 namespace KmipCards.Client.Services
 {
-    public class CardDataRepository : ICardRepository
+   
+    
+    public class CardDataViewModel : Interfaces.ICardDataViewModel
     {
-        private const string CURRENT_LOCAL_STORAGE_SET_NAME = "CURRENT_CARDS";
+        private const string LOCAL_STORAGE_KEY = "KMIP_CARDS_REPOSITORY";
+        
         protected List<CardRecord> _cards;
         private ILocalStorageService _localStorageService;
         private string _currentlyLoadedListName;
@@ -26,9 +29,9 @@ namespace KmipCards.Client.Services
         public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
         
         
-        public async Task LoadSetFromLocalStorage()
+        public async Task LoadSetFromLocalStorage(string name)
         {
-            var setString = await _localStorageService.GetItemAsStringAsync(CURRENT_LOCAL_STORAGE_SET_NAME);
+            var setString = await _localStorageService.GetItemAsStringAsync(LOCAL_STORAGE_KEY);
             if (setString != null)
             {
                 var cardRecords = ParseFromTextLines(setString);
@@ -40,10 +43,10 @@ namespace KmipCards.Client.Services
         private async Task SaveSetToLocalStorage()
         {
             var setString = RenderToLines(_cards);
-            await _localStorageService.SetItemAsStringAsync(CURRENT_LOCAL_STORAGE_SET_NAME, setString);
+            await _localStorageService.SetItemAsStringAsync(LOCAL_STORAGE_KEY, setString);
         }
 
-        public CardDataRepository(ILocalStorageService localStorageService)
+        public CardDataViewModel(ILocalStorageService localStorageService)
         {
             _localStorageService = localStorageService;
         }
@@ -73,7 +76,7 @@ namespace KmipCards.Client.Services
         {
             return CardRecord.ParseFromLine(line);
         }
-
+        
         public static List<CardRecord> ParseFromTextLines(string lines)
         {
             return
@@ -101,6 +104,7 @@ namespace KmipCards.Client.Services
             return Task.CompletedTask; 
         }
 
+      
         public virtual async Task InitAsync()
         {
             await LoadSetFromLocalStorage();
