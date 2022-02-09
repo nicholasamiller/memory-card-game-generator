@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using KmipCards.Client.Interfaces;
+using KmipCards.Client.Logging;
 using KmipCards.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,15 +26,15 @@ namespace KmipCards.Client
             builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
             builder.Services.AddBlazoredLocalStorage();
+            
             var localStorageService = builder.Services.BuildServiceProvider().GetService<ILocalStorageService>();
-            //if (builder.HostEnvironment.IsDevelopment())
-            //{
-            //    builder.Services.AddSingleton<ICardRepository>(_ => new MockDataRepository(localStorageService));
-            //}
-            //else
             {
                 builder.Services.AddSingleton((Func<IServiceProvider, Interfaces.ICardDataViewModel>)(_ => new Services.CardDataViewModel(localStorageService)));
             }
+
+            var httpClient = builder.Services.BuildServiceProvider().GetService<HttpClient>();
+           builder.Logging.AddProvider(new HostApiCustomLoggingProvider(httpClient));
+            
 
             builder.Services.AddMudServices();
 

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using KmipCards.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,11 @@ namespace KmipCards.Client.Dialogs
         [Inject]
         HttpClient _httpClient { get; set; }
 
+        [Inject]
+        ILoggerFactory _loggerFactory { get; set; }
+
+        ILogger _logger;
+
         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
         MudForm form;
         NewCardValidator newCardValidator;
@@ -24,6 +30,8 @@ namespace KmipCards.Client.Dialogs
         protected override void OnInitialized()
         {
             newCardValidator = new NewCardValidator();
+            _logger = _loggerFactory.CreateLogger<AddCharacterDialog>();
+
             base.OnInitialized();
         }
 
@@ -50,7 +58,7 @@ namespace KmipCards.Client.Dialogs
         {
             try
             {
-
+                _logger.Log(LogLevel.Error, "Test logging");
                 if (translationSource == TranslationSource.Chinese)
                 {
                     // clear pinyin and english
