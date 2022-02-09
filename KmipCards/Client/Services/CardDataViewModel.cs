@@ -29,7 +29,7 @@ namespace KmipCards.Client.Services
         public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
         
         
-        public async Task LoadSetFromLocalStorage(string name)
+        public async Task LoadSetFromLocalStorage()
         {
             var setString = await _localStorageService.GetItemAsStringAsync(LOCAL_STORAGE_KEY);
             if (setString != null)
