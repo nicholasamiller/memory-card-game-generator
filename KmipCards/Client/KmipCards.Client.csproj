@@ -12,6 +12,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Services\MockDataRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Services\MockDataRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="BlazorDownloadFileFast" Version="0.0.4" />
 		<PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
 		<PackageReference Include="FluentValidation" Version="10.3.4" />

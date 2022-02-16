@@ -24,17 +24,16 @@ namespace KmipCards.Client
 
             var baseAddress = builder.Configuration["BaseAddress"] ?? builder.HostEnvironment.BaseAddress;
             builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(baseAddress) });
-
+            
+            // adds ILocalStorageService
             builder.Services.AddBlazoredLocalStorage();
             
-            var localStorageService = builder.Services.BuildServiceProvider().GetService<ILocalStorageService>();
-            {
-                builder.Services.AddSingleton((Func<IServiceProvider, Interfaces.ICardDataViewModel>)(_ => new Services.CardDataViewModel(localStorageService)));
-            }
+            builder.Services.AddScoped<ICardRepository,LocalStorageCardRepository>();
+            builder.Services.AddScoped<ICardSetViewModel,CardDataViewModel>();
 
             var httpClient = builder.Services.BuildServiceProvider().GetService<HttpClient>();
-           builder.Logging.AddProvider(new HostApiCustomLoggingProvider(httpClient));
-            
+            builder.Logging.AddProvider(new HostApiCustomLoggingProvider(httpClient));
+            builder.Logging.SetMinimumLevel(builder.HostEnvironment.Environment == "Production" ? LogLevel.Information : LogLevel.Trace);
 
             builder.Services.AddMudServices();
 

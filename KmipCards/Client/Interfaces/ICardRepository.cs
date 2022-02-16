@@ -8,5 +8,5 @@ namespace KmipCards.Client.Interfaces
         Task<CardSet> GetCardSetAsync(string name);
         Task SaveCardSetAsync(CardSet cardSet);
     }
-    
+
 }

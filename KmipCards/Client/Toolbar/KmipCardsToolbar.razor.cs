@@ -12,14 +12,25 @@ namespace KmipCards.Client.Toolbar
     {
         DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
-
-
         // open add dialog
         [Inject]
         IDialogService DialogService { get; set; }
 
         [Inject]
-        ICardDataViewModel CardRepository { get; set; }
+        ICardSetViewModel CardRepository { get; set; }
+
+        private bool _printDialogDisabled = false;
+
+        protected override void OnInitialized()
+        {
+            // add event handler to repository changed to switch disabled state for print dialog
+            CardRepository.CardSetChanged += CardRepository_RepositoryChanged;
+        }
+
+        private void CardRepository_RepositoryChanged(object sender, CardViewModelChanged e)
+        {
+            
+        }
 
         private async Task OpenAddDialog()
         {

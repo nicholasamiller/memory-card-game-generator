@@ -5,17 +5,18 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace KmipCards.Client.Services
 {
     public class LocalStorageCardRepository : ICardRepository
     {
-        
-        public LocalStorageCardRepository(ILocalStorageService localStorageService, ILogger logger)
+        public LocalStorageCardRepository(ILocalStorageService localStorageService, ILoggerProvider loggerProvider)
         {
             this.localStorageService = localStorageService;
-            this.logger = logger;
+            this.logger = loggerProvider.CreateLogger("Local storage repository");
         }
 
         private const string LOCAL_STORAGE_KEY = "KMIP_CARDS_REPOSITORY";
@@ -39,18 +40,31 @@ namespace KmipCards.Client.Services
                     logger.Log(LogLevel.Error, e, "Could not deserialise existing cards from local storage.");
                     throw;
                 }
-
             }
         }
         
         public Task<CardSet> GetCardSetAsync(string name)
         {
-            throw new System.NotImplementedException();
+            var set = _cards.cardSets.FirstOrDefault(s => s.name == name);
+            return Task.FromResult(set);
         }
 
         public Task SaveCardSetAsync(CardSet cardSet)
         {
-            throw new System.NotImplementedException();
+            var existing = _cards.cardSets.FirstOrDefault(s => s.name == cardSet.name);
+            if (existing != null)
+            {
+                var indexOfExisting = _cards.cardSets.IndexOf(existing);
+                _cards.cardSets[indexOfExisting] = cardSet;
+                return Task.CompletedTask;
+            }
+            else
+            {
+                _cards.cardSets.Add(cardSet);
+                return Task.CompletedTask;
+            }
         }
+
+
     }
 }

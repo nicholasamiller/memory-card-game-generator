@@ -14,7 +14,6 @@ namespace KmipCards.Client.Dialogs
 {
     public partial class AddCharacterDialog : ComponentBase
     {
-
         [Inject]
         HttpClient _httpClient { get; set; }
 
@@ -58,7 +57,6 @@ namespace KmipCards.Client.Dialogs
         {
             try
             {
-                _logger.Log(LogLevel.Error, "Test logging");
                 if (translationSource == TranslationSource.Chinese)
                 {
                     // clear pinyin and english
@@ -82,7 +80,7 @@ namespace KmipCards.Client.Dialogs
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.Log(LogLevel.Error, ex, "Error getting translation.");
             }
         }
 

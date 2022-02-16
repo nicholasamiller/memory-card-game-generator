@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace KmipCards.Client.Model
 {
-    public record CardSet(string name, IEnumerable<CardRecord> cards);
-    public record CardSetCollection(IEnumerable<CardSet> cardSets);
-}
+    public record CardSet(string name, List<CardRecord> cards);
+
+    public record CardSetCollection(List<CardSet> cardSets);
+
+  }

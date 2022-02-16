@@ -6,69 +6,77 @@ using System.Text;
 using KmipCards.Client.Interfaces;
 using Blazored.LocalStorage;
 using System.Threading.Tasks;
+using KmipCards.Client.Model;
+using Microsoft.Extensions.Logging;
 
 namespace KmipCards.Client.Services
 {
-   
     
-    public class CardDataViewModel : Interfaces.ICardDataViewModel
+    public class CardDataViewModel : Interfaces.ICardSetViewModel
     {
-        private const string LOCAL_STORAGE_KEY = "KMIP_CARDS_REPOSITORY";
-        
-        protected List<CardRecord> _cards;
-        private ILocalStorageService _localStorageService;
-        private string _currentlyLoadedListName;
+        private CardSet _currentlyLoadedSet;
+        private ICardRepository _cardRepo;
+        private readonly ILogger _logger;
 
-        public event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
+        public event EventHandler<CardViewModelChanged> CardSetChanged;
 
-        public virtual void OnRepositoryChanged(CardRepositoryChangedEventArgs args)
+        public CardDataViewModel(ICardRepository cardRepository, ILoggerProvider loggerProvider)
         {
-            RepositoryChanged?.Invoke(this, args);
+            _cardRepo = cardRepository;
+            _logger = loggerProvider.CreateLogger(this.GetType().Name);
         }
-        
-        public string CurrentlyLoadedListName {  get {  return _currentlyLoadedListName; } set {  _currentlyLoadedListName = value;} }
-        
-        
-        public async Task LoadSetFromLocalStorage()
+
+        public virtual void OnViewModelChanged(CardViewModelChanged args)
         {
-            var setString = await _localStorageService.GetItemAsStringAsync(LOCAL_STORAGE_KEY);
-            if (setString != null)
+            CardSetChanged?.Invoke(this, args);
+        }
+
+        public string CurrentlyLoadedListName { get { return _currentlyLoadedSet.name; } set { _currentlyLoadedSet = _currentlyLoadedSet with { name = value }; } }
+
+        public async Task LoadSetFromLocalStorage(string name)
+        {
+            var cardSet = await _cardRepo.GetCardSetAsync(name);
+            if (cardSet == null)
             {
-                var cardRecords = ParseFromTextLines(setString);
-                _cards = cardRecords;
-                OnRepositoryChanged(null);
+                _logger.Log(LogLevel.Error, $"Attempted to load card set that is not in repository: {name}.");
+            }
+            else
+            {
+                _currentlyLoadedSet = cardSet;
+                OnViewModelChanged(null);
             }
         }
         
         private async Task SaveSetToLocalStorage()
         {
-            var setString = RenderToLines(_cards);
-            await _localStorageService.SetItemAsStringAsync(LOCAL_STORAGE_KEY, setString);
-        }
-
-        public CardDataViewModel(ILocalStorageService localStorageService)
-        {
-            _localStorageService = localStorageService;
+            await _cardRepo.SaveCardSetAsync(_currentlyLoadedSet);
         }
 
         
         public async Task AddCard(CardRecord cardRecord)
         {
-            if (!_cards.Contains(cardRecord))
-                _cards.Add(cardRecord);
+            var existing = _currentlyLoadedSet.cards.FirstOrDefault(cardRecord);
+            if (existing == null)
+            {
+                _currentlyLoadedSet.cards.Add(cardRecord);
+            }
+            else
+            {
+                existing = cardRecord; 
+            }
             await SaveSetToLocalStorage();
-            OnRepositoryChanged(null);
+            OnViewModelChanged(null);
         }
 
         public Task<List<CardRecord>> GetAllCards()
         {
-            return Task.FromResult(_cards);
+            return Task.FromResult(_currentlyLoadedSet.cards);
         }
 
         public Task RemoveCard(CardRecord cardRecord)
         {
-            _cards.Remove(cardRecord);
-            OnRepositoryChanged(null);
+            _currentlyLoadedSet.cards.Remove(cardRecord);
+            OnViewModelChanged(null);
             return Task.CompletedTask;
         }
         
@@ -99,20 +107,10 @@ namespace KmipCards.Client.Services
 
         public Task RemoveAllCards()
         {
-            _cards = new List<CardRecord>();
-            OnRepositoryChanged(null);
+            _currentlyLoadedSet = new CardSet(_currentlyLoadedSet.name, new List<CardRecord>());
+            OnViewModelChanged(null);
             return Task.CompletedTask; 
         }
 
-      
-        public virtual async Task InitAsync()
-        {
-            await LoadSetFromLocalStorage();
-            if (_cards == null)
-            {
-                _cards = new List<CardRecord>();
-            }
-            OnRepositoryChanged(null);
-        }
     }
 }

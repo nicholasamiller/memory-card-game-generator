@@ -5,18 +5,17 @@ using System.Threading.Tasks;
 
 namespace KmipCards.Client.Interfaces
 {
-    public interface ICardDataViewModel
+    public interface ICardSetViewModel
     {
-        Task InitAsync();
         Task AddCard(CardRecord cardRecord);
         Task RemoveCard(CardRecord cardRecord);
         Task<List<CardRecord>> GetAllCards();
         Task RemoveAllCards();
-        void OnRepositoryChanged(CardRepositoryChangedEventArgs args);
+        void OnViewModelChanged(CardViewModelChanged args);
         
         string CurrentlyLoadedListName { get; set; }
 
-        event EventHandler<CardRepositoryChangedEventArgs> RepositoryChanged;
+        event EventHandler<CardViewModelChanged> CardSetChanged;
 
     }
 

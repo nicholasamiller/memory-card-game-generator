@@ -1,6 +1,6 @@
 ﻿@using KmipCards.Shared;
 @using KmipCards.Client.Interfaces;
-@inject ICardDataViewModel CardRepository;
+@inject ICardSetViewModel CardSetViewModel;
 
 <style>
     .selected {
@@ -36,16 +36,13 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await CardRepository.InitAsync();
-		CardRepository.RepositoryChanged += (sender, args) =>
+		CardSetViewModel.CardSetChanged += (sender, args) =>
 		{
 			StateHasChanged();
 		};
-		_cards = await CardRepository.GetAllCards();
+		_cards = await CardSetViewModel.GetAllCards();
 		await base.OnInitializedAsync();
 	}
-
-
 	
 	private void RowClickEvent(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
     {

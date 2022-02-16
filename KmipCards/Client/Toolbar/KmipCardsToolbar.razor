@@ -1,13 +1,11 @@
 ﻿
 <MudToolBar>
-		<MudFab Color="Color.Primary" Icon="@Icons.Material.Filled.Add" aria-label="add" OnClick="OpenAddDialog" />
-		<MudIconButton Style="color: white;" Size="@Size.Large" Icon="@Icons.Material.Filled.Add" OnClick="OpenAddDialog" />
-		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.Delete"  />
-		<MudSpacer />
 		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.CreateNewFolder"  />
 		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.FolderOpen"  />
-		<MudSpacer />
-		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.Print" OnClick="OpenPrintDialog"  />
+		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.Print" OnClick="OpenPrintDialog" Disabled=@_printDialogDisabled />
+		<MudSpacer/>
+		<MudIconButton Style="color: white;" Size="@Size.Large" Icon="@Icons.Material.Filled.Add" OnClick="OpenAddDialog" />
+		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.Delete"  />
 </MudToolBar>
 
-
+ 

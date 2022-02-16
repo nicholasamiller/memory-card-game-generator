@@ -2,6 +2,7 @@
 using KmipCards.Client.Interfaces;
 using KmipCards.Client.Services;
 using KmipCards.Shared;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,20 +10,8 @@ using System.Threading.Tasks;
 namespace KmipCards.Client.Services
 {
     public class MockDataRepository : CardDataViewModel
-    {   
-        public  MockDataRepository(ILocalStorageService localStorageService) : base(localStorageService)
-        {
-            this.CurrentlyLoadedListName = "mockRepo";
-        }
-
-        public async override Task InitAsync()
-        {
-
-            await base.LoadSetFromLocalStorage();
-            if (base._cards == null)
-            {
-
-                var testCardsData = @"一 (yì) one
+    {
+        string testCardsData = @"一 (yì) one
 二 (èr) two
 三 (sān) three
 人 (rén) a person, human
@@ -66,9 +55,24 @@ namespace KmipCards.Client.Services
 太热了 (tài rè le) too hot
 太冷了 (tài lěng le) too cold";
 
+        public  MockDataRepository(ICardRepository cardRepository, ILogger logger) : base(cardRepository, logger)
+        {
+            this.CurrentlyLoadedListName = "mockRepo";
+
+        }
+
+        public async override Task InitAsync()
+        {
+
+            await base.LoadSetFromLocalStorage();
+            if (base._cards == null)
+            {
+
+               
+
                 var mockCardData = CardDataViewModel.ParseFromTextLines(testCardsData);
                 base._cards = mockCardData;
-                OnRepositoryChanged(null);
+                OnViewModelChanged(null);
             }
         }
 
