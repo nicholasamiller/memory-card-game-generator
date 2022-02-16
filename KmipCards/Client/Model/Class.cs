@@ -5,6 +5,6 @@ namespace KmipCards.Client.Model
 {
     public record CardSet(string name, List<CardRecord> cards);
 
-    public record CardSetCollection(List<CardSet> cardSets);
+    public record CardSetCollection(string defaultCardSetName, List<CardSet> cardSets);
 
   }

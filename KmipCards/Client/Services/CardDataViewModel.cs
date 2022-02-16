@@ -11,6 +11,10 @@ using Microsoft.Extensions.Logging;
 
 namespace KmipCards.Client.Services
 {
+
+    // user: when opens with no cards loaded, a new set, untitled
+    // that way they can use the app without caring about folder management
+    // create untitled in Card repo init
     
     public class CardDataViewModel : Interfaces.ICardSetViewModel
     {
@@ -47,30 +51,35 @@ namespace KmipCards.Client.Services
             }
         }
         
-        private async Task SaveSetToLocalStorage()
+        private async Task SaveSet()
         {
             await _cardRepo.SaveCardSetAsync(_currentlyLoadedSet);
+            await _cardRepo.SetDefaultCardSetName(_currentlyLoadedSet.name);
         }
 
         
         public async Task AddCard(CardRecord cardRecord)
         {
-            var existing = _currentlyLoadedSet.cards.FirstOrDefault(cardRecord);
+            var existing = _currentlyLoadedSet.cards.FirstOrDefault(r => r == cardRecord);
             if (existing == null)
             {
                 _currentlyLoadedSet.cards.Add(cardRecord);
             }
             else
             {
-                existing = cardRecord; 
+                existing = cardRecord;
             }
-            await SaveSetToLocalStorage();
+            await SaveSet();
             OnViewModelChanged(null);
         }
 
-        public Task<List<CardRecord>> GetAllCards()
+        public async Task<List<CardRecord>> GetAllCards()
         {
-            return Task.FromResult(_currentlyLoadedSet.cards);
+            if (_currentlyLoadedSet == null)
+            {
+                _currentlyLoadedSet = await _cardRepo.GetDefaultCardSetAsync();
+            }
+            return _currentlyLoadedSet.cards;
         }
 
         public Task RemoveCard(CardRecord cardRecord)
