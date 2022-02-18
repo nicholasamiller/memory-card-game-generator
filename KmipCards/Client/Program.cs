@@ -33,7 +33,7 @@ namespace KmipCards.Client
 
             var httpClient = builder.Services.BuildServiceProvider().GetService<HttpClient>();
             builder.Logging.AddProvider(new HostApiCustomLoggingProvider(httpClient));
-            builder.Logging.SetMinimumLevel(builder.HostEnvironment.Environment == "Production" ? LogLevel.Information : LogLevel.Trace);
+            builder.Logging.SetMinimumLevel(builder.HostEnvironment.Environment == "Production" ? LogLevel.Warning : LogLevel.Debug);
 
             builder.Services.AddMudServices();
 

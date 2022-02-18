@@ -1,5 +1,6 @@
 ﻿@using KmipCards.Shared;
 @using KmipCards.Client.Interfaces;
+@using System.Diagnostics
 @inject ICardSetViewModel CardSetViewModel;
 
 <style>
@@ -17,8 +18,14 @@
 </style>
 
 
-<MudTable Breakpoint="Breakpoint.None" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@(_cards) 
+<MudTable Breakpoint="Breakpoint.None" @ref="mudTable" RowClassFunc="@SelectedRowClassFunc" OnRowClick="RowClickEvent"  Items=@(_cards) ReadOnly="@false" 
   T="CardRecord">
+  <ToolBarContent>
+	  <MudTextField T="string" TextChanged="@OnTextChanged" Text="@CardSetViewModel.CurrentlyLoadedListName"></MudTextField>
+	  <MudSpacer/>
+		<MudIconButton Size="@Size.Medium"  Icon="@Icons.Material.Filled.Edit" Disabled="@_disableToolbarButtons" />
+		<MudIconButton Size="@Size.Medium"  Icon="@Icons.Material.Filled.Delete"  Disabled="@_disableToolbarButtons"/>
+  </ToolBarContent>
 	<RowTemplate>
 		<MudTd Class="pl-6 kmipCardsListRow" DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
 		<MudTd Class="kmipCardsListRow" DataLabel="Pinyin">@context.CardDataDto.Pinyin</MudTd>
@@ -32,6 +39,7 @@
 	private CardRecord _currentlySelectedRecord;
 	private int selectedRowNumber = -1;
 	private IEnumerable<CardRecord> _cards;
+	private bool _disableToolbarButtons = false;
 
 
 	protected override async Task OnInitializedAsync()
@@ -43,10 +51,16 @@
 		_cards = await CardSetViewModel.GetAllCards();
 		await base.OnInitializedAsync();
 	}
-	
+
 	private void RowClickEvent(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
-    {
-    }
+	{
+	}
+
+	// only files when edit complete
+	private async Task OnTextChanged(string text)
+	{
+		 await CardSetViewModel.RenameList(text);
+	}
 
 	private string SelectedRowClassFunc(CardRecord record, int rowNumber)
 	{
@@ -55,12 +69,14 @@
 		if (selectedRowNumber == rowNumber)
 		{
 			selectedRowNumber = -1;
+			_disableToolbarButtons = true;
 			return string.Empty;
 		}
 		else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(record))
 		{
 			selectedRowNumber = rowNumber;
 			_currentlySelectedRecord = record;
+			_disableToolbarButtons = false;
 			return "selected";
         }
         else

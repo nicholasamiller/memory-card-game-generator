@@ -11,15 +11,12 @@ using Microsoft.Extensions.Logging;
 
 namespace KmipCards.Client.Services
 {
-
-    // user: when opens with no cards loaded, a new set, untitled
-    // that way they can use the app without caring about folder management
-    // create untitled in Card repo init
     
     public class CardDataViewModel : Interfaces.ICardSetViewModel
     {
         private CardSet _currentlyLoadedSet;
         private ICardRepository _cardRepo;
+        private AppData _appData;
         private readonly ILogger _logger;
 
         public event EventHandler<CardViewModelChanged> CardSetChanged;
@@ -35,35 +32,26 @@ namespace KmipCards.Client.Services
             CardSetChanged?.Invoke(this, args);
         }
 
-        public string CurrentlyLoadedListName { get { return _currentlyLoadedSet.name; } set { _currentlyLoadedSet = _currentlyLoadedSet with { name = value }; } }
 
-        public async Task LoadSetFromLocalStorage(string name)
-        {
-            var cardSet = await _cardRepo.GetCardSetAsync(name);
-            if (cardSet == null)
-            {
-                _logger.Log(LogLevel.Error, $"Attempted to load card set that is not in repository: {name}.");
-            }
-            else
-            {
-                _currentlyLoadedSet = cardSet;
-                OnViewModelChanged(null);
-            }
-        }
+        public string CurrentlyLoadedListName => _currentlyLoadedSet.Name;
         
+        public async Task RenameList(string text)
+        {
+                         
+        }
         private async Task SaveSet()
         {
+            await _cardRepo.SetDefaultCardSetName(_currentlyLoadedSet.Name);
             await _cardRepo.SaveCardSetAsync(_currentlyLoadedSet);
-            await _cardRepo.SetDefaultCardSetName(_currentlyLoadedSet.name);
         }
 
         
         public async Task AddCard(CardRecord cardRecord)
         {
-            var existing = _currentlyLoadedSet.cards.FirstOrDefault(r => r == cardRecord);
+            var existing = _currentlyLoadedSet.Cards.FirstOrDefault(r => r == cardRecord);
             if (existing == null)
             {
-                _currentlyLoadedSet.cards.Add(cardRecord);
+                _currentlyLoadedSet.Cards.Add(cardRecord);
             }
             else
             {
@@ -75,18 +63,23 @@ namespace KmipCards.Client.Services
 
         public async Task<List<CardRecord>> GetAllCards()
         {
+            if (_appData == null)
+            {
+                _appData = await _cardRepo.GetAppDataAsync();
+            }
+            _currentlyLoadedSet = 
             if (_currentlyLoadedSet == null)
             {
-                _currentlyLoadedSet = await _cardRepo.GetDefaultCardSetAsync();
+                _currentlyLoadedSet = await _cardRepo.GetAppDataAsync();
             }
-            return _currentlyLoadedSet.cards;
+            return _currentlyLoadedSet.Cards;
         }
 
-        public Task RemoveCard(CardRecord cardRecord)
+        public async Task RemoveCard(CardRecord cardRecord)
         {
-            _currentlyLoadedSet.cards.Remove(cardRecord);
+            _currentlyLoadedSet.Cards.Remove(cardRecord);
+            await SaveSet();
             OnViewModelChanged(null);
-            return Task.CompletedTask;
         }
         
         public static CardRecord ParseFromLine(string line)
@@ -114,11 +107,11 @@ namespace KmipCards.Client.Services
             return sb.ToString();
         }
 
-        public Task RemoveAllCards()
+        public async Task RemoveAllCards()
         {
-            _currentlyLoadedSet = new CardSet(_currentlyLoadedSet.name, new List<CardRecord>());
+            _currentlyLoadedSet = new CardSet(_currentlyLoadedSet.Name, new List<CardRecord>());
+            await SaveSet();
             OnViewModelChanged(null);
-            return Task.CompletedTask; 
         }
 
     }

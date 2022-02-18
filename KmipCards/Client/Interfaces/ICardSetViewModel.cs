@@ -12,7 +12,10 @@ namespace KmipCards.Client.Interfaces
         Task<List<CardRecord>> GetAllCards();
         Task RemoveAllCards();
         void OnViewModelChanged(CardViewModelChanged args);
-        string CurrentlyLoadedListName { get; set; }
+        Task RenameList(string text);
+
+        string CurrentlyLoadedListName { get;  }
+
         event EventHandler<CardViewModelChanged> CardSetChanged;
     }
 

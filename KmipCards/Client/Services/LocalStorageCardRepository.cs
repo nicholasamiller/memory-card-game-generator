@@ -23,7 +23,7 @@ namespace KmipCards.Client.Services
         private const string INITIAL_CARD_SET_NAME = "Untitled";
         private readonly ILocalStorageService localStorageService;
         private readonly ILogger logger;
-        private CardSetCollection _cardSets;
+        private AppData _appData;
 
 
         public async Task Init()
@@ -33,8 +33,8 @@ namespace KmipCards.Client.Services
             {
                 try
                 {
-                    var cardSetCollection = JsonConvert.DeserializeObject<CardSetCollection>(existing);
-                    _cardSets = cardSetCollection;
+                    var cardSetCollection = JsonConvert.DeserializeObject<AppData>(existing);
+                    _appData = cardSetCollection;
                 }
                 catch (Exception e)
                 {
@@ -44,64 +44,27 @@ namespace KmipCards.Client.Services
             }
             else
             {
-                _cardSets = new CardSetCollection(INITIAL_CARD_SET_NAME, new List<CardSet>() { new CardSet(INITIAL_CARD_SET_NAME, new List<KmipCards.Shared.CardRecord>()) });
+                _appData = new AppData(INITIAL_CARD_SET_NAME, new List<CardSet>() { new CardSet(INITIAL_CARD_SET_NAME, new List<KmipCards.Shared.CardRecord>()) });
                 await SerializeToLocalStorageAsync();
             }
         }
 
         private async Task SerializeToLocalStorageAsync()
         {
-            await localStorageService.SetItemAsStringAsync(LOCAL_STORAGE_KEY, JsonConvert.SerializeObject(_cardSets));
+            await localStorageService.SetItemAsStringAsync(LOCAL_STORAGE_KEY, JsonConvert.SerializeObject(_appData));
         }    
-
-        public async Task<CardSet> GetCardSetAsync(string name)
+              
+        public async Task<AppData> GetAppDataAsync()
         {
-            if (_cardSets == null)
-            {
+            if (_appData == null)
                 await Init();
-            }
-            return _cardSets.cardSets.FirstOrDefault(s => s.name == name);
+            return _appData;
         }
 
-        public async Task SaveCardSetAsync(CardSet cardSet)
+        public async Task SetAppDataAsync(AppData appData)
         {
-            if (_cardSets == null)
-            {
-                await Init();
-            }
-            var existing = _cardSets.cardSets.FirstOrDefault(s => s.name == cardSet.name);
-            if (existing != null)
-            {
-                var indexOfExisting = _cardSets.cardSets.IndexOf(existing);
-                _cardSets.cardSets[indexOfExisting] = cardSet;
-            }
-            else
-            {
-                _cardSets.cardSets.Add(cardSet);
-            }
+            _appData = appData;
             await SerializeToLocalStorageAsync();
-        }
-                
-        public async Task<CardSet> GetDefaultCardSetAsync()
-        {
-            if (_cardSets == null)
-            {
-                await Init();
-                return await GetCardSetAsync(INITIAL_CARD_SET_NAME);
-            }
-            else
-            {
-                return await GetCardSetAsync(_cardSets.defaultCardSetName);
-            }
-        }
-
-        public async Task SetDefaultCardSetName(string name)
-        {
-            if (_cardSets == null)
-            {
-                await Init();
-            }
-            _cardSets = _cardSets with { defaultCardSetName = name };
         }
     }
 }
