@@ -49,7 +49,7 @@ namespace KmipCards.Client.Dialogs
         private async Task GeneratePdf()
         {
 
-            var currentCards = await CardRepository.GetAllCards();
+            var currentCards = await CardRepository.LoadInitialCards();
 
             var specs = currentCards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
 

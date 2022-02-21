@@ -36,10 +36,10 @@
 
 @code {
 	private MudTable<CardRecord> mudTable;
-	private CardRecord _currentlySelectedRecord;
-	private int selectedRowNumber = -1;
+	private CardRecord _currentlySelectedRecord = null;
+	private int currentlySelectedRowNumber = -1;
 	private IEnumerable<CardRecord> _cards;
-	private bool _disableToolbarButtons = false;
+	private bool _disableToolbarButtons = true;
 
 
 	protected override async Task OnInitializedAsync()
@@ -48,41 +48,50 @@
 		{
 			StateHasChanged();
 		};
-		_cards = await CardSetViewModel.GetAllCards();
+		_cards = await CardSetViewModel.LoadInitialCards();
 		await base.OnInitializedAsync();
 	}
 
+	// fires before RowClassFunc
 	private void RowClickEvent(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
 	{
+		SetSelectedItem(tableRowClickEventArgs);	
+		SetToolbarButtonsStatus();
 	}
 
 	// only files when edit complete
 	private async Task OnTextChanged(string text)
 	{
-		 await CardSetViewModel.RenameList(text);
+		await CardSetViewModel.RenameList(text);
+	}
+
+	private void SetSelectedItem(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
+	{
+		if (_currentlySelectedRecord == tableRowClickEventArgs.Item) // deselect
+		{
+			_currentlySelectedRecord = null;
+		}
+		else
+		{
+			_currentlySelectedRecord = tableRowClickEventArgs.Item;
+		}
+	}
+
+	private void SetToolbarButtonsStatus()
+	{
+		_disableToolbarButtons = _currentlySelectedRecord == null;
 	}
 
 	private string SelectedRowClassFunc(CardRecord record, int rowNumber)
 	{
-
-		// deselect
-		if (selectedRowNumber == rowNumber)
+		if (_currentlySelectedRecord == record)
 		{
-			selectedRowNumber = -1;
-			_disableToolbarButtons = true;
-			return string.Empty;
+			return "selected"; 
 		}
-		else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(record))
+		else 
 		{
-			selectedRowNumber = rowNumber;
-			_currentlySelectedRecord = record;
-			_disableToolbarButtons = false;
-			return "selected";
-        }
-        else
-        {
-            return string.Empty;
-        }
+			return String.Empty;
+		}
 	}
 
 

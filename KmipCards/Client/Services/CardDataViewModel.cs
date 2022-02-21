@@ -35,14 +35,10 @@ namespace KmipCards.Client.Services
 
         public string CurrentlyLoadedListName => _currentlyLoadedSet.Name;
         
-        public async Task RenameList(string text)
-        {
-                         
-        }
         private async Task SaveSet()
         {
-            await _cardRepo.SetDefaultCardSetName(_currentlyLoadedSet.Name);
-            await _cardRepo.SaveCardSetAsync(_currentlyLoadedSet);
+            _appData.DefaultCardSetName = _currentlyLoadedSet.Name;
+            await _cardRepo.SetAppDataAsync(_appData);
         }
 
         
@@ -61,17 +57,13 @@ namespace KmipCards.Client.Services
             OnViewModelChanged(null);
         }
 
-        public async Task<List<CardRecord>> GetAllCards()
+        public async Task<List<CardRecord>> LoadInitialCards()
         {
             if (_appData == null)
             {
                 _appData = await _cardRepo.GetAppDataAsync();
             }
-            _currentlyLoadedSet = 
-            if (_currentlyLoadedSet == null)
-            {
-                _currentlyLoadedSet = await _cardRepo.GetAppDataAsync();
-            }
+            _currentlyLoadedSet = _appData.Cardsets.FirstOrDefault(cs => cs.Name == _appData.DefaultCardSetName);
             return _currentlyLoadedSet.Cards;
         }
 
@@ -114,5 +106,10 @@ namespace KmipCards.Client.Services
             OnViewModelChanged(null);
         }
 
+        public async Task RenameList(string text)
+        {
+            _currentlyLoadedSet.Name = text;
+            await SaveSet();            
+        }
     }
 }
