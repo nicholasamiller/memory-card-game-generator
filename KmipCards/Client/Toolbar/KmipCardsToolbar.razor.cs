@@ -34,7 +34,10 @@ namespace KmipCards.Client.Toolbar
 
         private async Task OpenAddDialog()
         {
-            var addCardDialog = DialogService.Show<AddCharacterDialog>("Add Card",maxWidth);
+            var dialogParams = new DialogParameters();
+            dialogParams.Add("CardRecord", CardRecord.GetEmpty());
+            var addCardDialog = DialogService.Show<AddCharacterDialog>("Add Card",dialogParams, maxWidth);
+
             var result = await addCardDialog.Result;
             var cardData = result.Data as CardRecord;
             if (cardData != null)

@@ -37,5 +37,10 @@ namespace KmipCards.Shared
 		{
 			return HashCode.Combine(CardDataDto, Tags);
 		}
+
+        public static CardRecord GetEmpty()
+        {
+            return new CardRecord() { CardDataDto = new CardDataDto(), Tags = new List<string>() }; 
+        }
 	}
 }

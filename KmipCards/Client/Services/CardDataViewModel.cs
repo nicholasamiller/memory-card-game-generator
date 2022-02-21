@@ -41,7 +41,6 @@ namespace KmipCards.Client.Services
             await _cardRepo.SetAppDataAsync(_appData);
         }
 
-        
         public async Task AddCard(CardRecord cardRecord)
         {
             var existing = _currentlyLoadedSet.Cards.FirstOrDefault(r => r == cardRecord);
@@ -110,6 +109,17 @@ namespace KmipCards.Client.Services
         {
             _currentlyLoadedSet.Name = text;
             await SaveSet();            
+        }
+
+        public async Task ReplaceCard(CardRecord oldCard, CardRecord newCard)
+        {
+            var toRemove = _currentlyLoadedSet.Cards.FirstOrDefault(c => c == oldCard);
+            if (toRemove != null)
+            {
+                var i = _currentlyLoadedSet.Cards.IndexOf(toRemove);
+                _currentlyLoadedSet.Cards[i] = newCard;
+            }
+            await SaveSet();
         }
     }
 }

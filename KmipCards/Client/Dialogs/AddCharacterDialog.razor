@@ -6,15 +6,15 @@
 <MudDialog>
     <DialogContent>
 
-<MudForm Model="@_card" @ref="@form">
+<MudForm Model="@CardRecord" @ref="@form">
      <div class="input-group">
-        <MudTextField Label="Chinese Characters" @bind-Value=_card.CardDataDto.Chinese id="chinese" Immediate="true"  Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Chinese)"/>
+        <MudTextField Label="Chinese Characters" @bind-Value=CardRecord.CardDataDto.Chinese id="chinese" Immediate="true"  Validation="@(newCardValidator.ValidateValue)" For="@(() => CardRecord.CardDataDto.Chinese)"/>
        <KmipCardsSecondaryLoadingButton LongTask=OnTranslationRequestedChinese>Translate</KmipCardsSecondaryLoadingButton>
        
     </div>
-     <MudTextField Label="Pinyin" @bind-Value=_card.CardDataDto.Pinyin Immediate="true" Validation="@(newCardValidator.ValidateValue)" For="@(() => _card.CardDataDto.Pinyin)"/>
+     <MudTextField Label="Pinyin" @bind-Value=CardRecord.CardDataDto.Pinyin Immediate="true" Validation="@(newCardValidator.ValidateValue)" For="@(() => CardRecord.CardDataDto.Pinyin)"/>
    <div class="input-group"> 
-      <MudTextField Label="English" @bind-Value=_card.CardDataDto.English Immediate="true" Validation="@(newCardValidator.ValidateValue)"  For="@(() => _card.CardDataDto.English)" />
+      <MudTextField Label="English" @bind-Value=CardRecord.CardDataDto.English Immediate="true" Validation="@(newCardValidator.ValidateValue)"  For="@(() => CardRecord.CardDataDto.English)" />
        <KmipCardsSecondaryLoadingButton LongTask=OnTranslationRequestedEnglish>Translate</KmipCardsSecondaryLoadingButton>
           
     </div>

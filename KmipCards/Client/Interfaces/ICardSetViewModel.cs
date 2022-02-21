@@ -9,6 +9,7 @@ namespace KmipCards.Client.Interfaces
     {
         Task AddCard(CardRecord cardRecord);
         Task RemoveCard(CardRecord cardRecord);
+        Task ReplaceCard(CardRecord oldCard, CardRecord newCard);
         Task<List<CardRecord>> LoadInitialCards();
         Task RemoveAllCards();
         void OnViewModelChanged(CardViewModelChanged args);

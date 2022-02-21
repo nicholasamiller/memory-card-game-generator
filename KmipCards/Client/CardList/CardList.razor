@@ -1,7 +1,9 @@
-﻿@using KmipCards.Shared;
+﻿@using KmipCards.Client.Dialogs
+@using KmipCards.Shared;
 @using KmipCards.Client.Interfaces;
 @using System.Diagnostics
 @inject ICardSetViewModel CardSetViewModel;
+@inject IDialogService DialogService;
 
 <style>
     .selected {
@@ -23,8 +25,8 @@
   <ToolBarContent>
 	  <MudTextField T="string" TextChanged="@OnTextChanged" Text="@CardSetViewModel.CurrentlyLoadedListName"></MudTextField>
 	  <MudSpacer/>
-		<MudIconButton Size="@Size.Medium"  Icon="@Icons.Material.Filled.Edit" Disabled="@_disableToolbarButtons" />
-		<MudIconButton Size="@Size.Medium"  Icon="@Icons.Material.Filled.Delete"  Disabled="@_disableToolbarButtons"/>
+		<MudIconButton Size="@Size.Medium"  Icon="@Icons.Material.Filled.Edit" Disabled="@_disableToolbarButtons" OnClick="@EditSelectedCard" />
+		<MudIconButton Size="@Size.Medium"  Icon="@Icons.Material.Filled.Delete"  Disabled="@_disableToolbarButtons" OnClick="@DeleteSelectedCard"/>
   </ToolBarContent>
 	<RowTemplate>
 		<MudTd Class="pl-6 kmipCardsListRow" DataLabel="Chinese">@context.CardDataDto.Chinese</MudTd>
@@ -52,11 +54,31 @@
 		await base.OnInitializedAsync();
 	}
 
-	// fires before RowClassFunc
+	// fires before RowClassFunc 
 	private void RowClickEvent(TableRowClickEventArgs<CardRecord> tableRowClickEventArgs)
 	{
 		SetSelectedItem(tableRowClickEventArgs);	
 		SetToolbarButtonsStatus();
+	}
+
+	private async Task EditSelectedCard(MouseEventArgs mouseEventArgs)
+	{
+		var dialogParams = new DialogParameters();
+		// name of param has to match name of Component Parameter
+		dialogParams.Add("CardRecord", _currentlySelectedRecord);
+		var editCardDialog = DialogService.Show<AddCharacterDialog>("Edit Card", dialogParams, new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true });
+		var result = await editCardDialog.Result;
+		var cardData = result.Data as CardRecord;
+		if (cardData != null)
+		{
+			await CardSetViewModel.RemoveCard(_currentlySelectedRecord);
+			await CardSetViewModel.AddCard(cardData);
+		}
+	}
+
+	private async Task DeleteSelectedCard(MouseEventArgs mouseEventArgs)
+	{
+		await CardSetViewModel.RemoveCard(_currentlySelectedRecord);	 
 	}
 
 	// only files when edit complete
@@ -93,6 +115,7 @@
 			return String.Empty;
 		}
 	}
+
 
 
 }

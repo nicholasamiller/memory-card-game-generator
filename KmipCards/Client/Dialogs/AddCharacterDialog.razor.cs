@@ -23,20 +23,24 @@ namespace KmipCards.Client.Dialogs
         ILogger _logger;
 
         [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+        [Parameter] public CardRecord CardRecord { get; set; } // mud dialog sets this from objects passed into Show method
+
         MudForm form;
         NewCardValidator newCardValidator;
+        
+
+
         
         protected override void OnInitialized()
         {
             newCardValidator = new NewCardValidator();
             _logger = _loggerFactory.CreateLogger<AddCharacterDialog>();
-
+            
             base.OnInitialized();
         }
 
         void Cancel() => MudDialog.Cancel();
-
-        CardRecord _card = new CardRecord() { CardDataDto = new CardDataDto() };
 
         private enum TranslationSource
         {
@@ -60,20 +64,20 @@ namespace KmipCards.Client.Dialogs
                 if (translationSource == TranslationSource.Chinese)
                 {
                     // clear pinyin and english
-                    _card.CardDataDto.English = null;
-                    _card.CardDataDto.Pinyin = null;
+                    CardRecord.CardDataDto.English = null;
+                    CardRecord.CardDataDto.Pinyin = null;
                 }
                 else if (translationSource == TranslationSource.English)
                 {
-                    _card.CardDataDto.Chinese = null;
-                    _card.CardDataDto.Pinyin = null;
+                    CardRecord.CardDataDto.Chinese = null;
+                    CardRecord.CardDataDto.Pinyin = null;
                 }
-                var requestDto = new TranslationRequestDto() { English = _card.CardDataDto.English, Chinese = _card.CardDataDto.Chinese, Pinyin = _card.CardDataDto.Pinyin };
+                var requestDto = new TranslationRequestDto() { English = CardRecord.CardDataDto.English, Chinese = CardRecord.CardDataDto.Chinese, Pinyin = CardRecord.CardDataDto.Pinyin };
 
                 var translationResponse = await _httpClient.PostAsJsonAsync("/api/translate", requestDto);
                 translationResponse.EnsureSuccessStatusCode();
                 var dtoReturned = await translationResponse.Content.ReadFromJsonAsync<CardDataDto>();
-                _card = new CardRecord() { CardDataDto = dtoReturned };
+                CardRecord = new CardRecord() { CardDataDto = dtoReturned };
                 StateHasChanged();
                 await form.Validate();
 
@@ -127,7 +131,7 @@ namespace KmipCards.Client.Dialogs
 
             if (form.IsValid)
             {
-                var cardToReturn = _card;
+                var cardToReturn = CardRecord;
                 MudDialog.Close(DialogResult.Ok<CardRecord>(cardToReturn));
             }
         }
