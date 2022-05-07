@@ -1,7 +1,7 @@
 ﻿
 <MudToolBar>
-		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.CreateNewFolder"  />
-		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.FolderOpen"  />
+		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.CreateNewFolder" OnClick="@NewSet"  />
+		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.FolderOpen"  OnClick="@OpenSetDialog"  />
 		<MudIconButton Style="color: white;"  Size="@Size.Large"  Icon="@Icons.Material.Filled.Print" OnClick="OpenPrintDialog" Disabled=@_printDialogDisabled />
 		<MudSpacer/>
 		<MudIconButton Style="color: white;" Size="@Size.Large" Icon="@Icons.Material.Filled.Add" OnClick="OpenAddDialog" />

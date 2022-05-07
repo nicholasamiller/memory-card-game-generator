@@ -14,6 +14,7 @@ namespace KmipCards.Client.Interfaces
         Task RemoveAllCards();
         void OnViewModelChanged(CardViewModelChanged args);
         Task RenameList(string text);
+        Task SetCardSet(string cardSetName);
 
         string CurrentlyLoadedListName { get;  }
 

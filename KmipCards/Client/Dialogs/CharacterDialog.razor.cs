@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace KmipCards.Client.Dialogs
 {
-    public partial class AddCharacterDialog : ComponentBase
+    public partial class CharacterDialog : ComponentBase
     {
         [Inject]
         HttpClient _httpClient { get; set; }
@@ -30,12 +30,11 @@ namespace KmipCards.Client.Dialogs
         NewCardValidator newCardValidator;
         
 
-
         
         protected override void OnInitialized()
         {
             newCardValidator = new NewCardValidator();
-            _logger = _loggerFactory.CreateLogger<AddCharacterDialog>();
+            _logger = _loggerFactory.CreateLogger<CharacterDialog>();
             
             base.OnInitialized();
         }

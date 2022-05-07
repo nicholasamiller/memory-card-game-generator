@@ -1,0 +1,16 @@
+﻿<MudDialog>
+
+    <DialogContent>
+        <MudList Clickable="true" @bind-SelectedValue="selectedValue">
+            @foreach (var set in Sets)
+            {
+              <MudListItem>@set</MudListItem>
+            }
+        </MudList>
+        </DialogContent>
+      <DialogActions>
+        <MudButton OnClick="@Open">Open</MudButton>
+        <MudButton OnClick="@Cancel">Cancel</MudButton>
+    </DialogActions>
+</MudDialog>
+

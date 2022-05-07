@@ -31,8 +31,7 @@ namespace KmipCards.Client.Services
         {
             CardSetChanged?.Invoke(this, args);
         }
-
-
+        
         public string CurrentlyLoadedListName => _currentlyLoadedSet.Name;
         
         private async Task SaveSet()
@@ -120,6 +119,13 @@ namespace KmipCards.Client.Services
                 _currentlyLoadedSet.Cards[i] = newCard;
             }
             await SaveSet();
+        }
+
+        public async Task SetCardSet(string cardSetName)
+        {
+            var appData = await _cardRepo.GetAppDataAsync();
+            _currentlyLoadedSet = appData.Cardsets.FirstOrDefault(s => s.Name == cardSetName);
+            OnViewModelChanged(null);
         }
     }
 }

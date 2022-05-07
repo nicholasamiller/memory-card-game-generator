@@ -66,7 +66,7 @@
 		var dialogParams = new DialogParameters();
 		// name of param has to match name of Component Parameter
 		dialogParams.Add("CardRecord", _currentlySelectedRecord);
-		var editCardDialog = DialogService.Show<AddCharacterDialog>("Edit Card", dialogParams, new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true });
+		var editCardDialog = DialogService.Show<CharacterDialog>("Edit Card", dialogParams, new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true });
 		var result = await editCardDialog.Result;
 		var cardData = result.Data as CardRecord;
 		if (cardData != null)
