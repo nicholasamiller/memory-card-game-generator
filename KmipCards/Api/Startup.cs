@@ -46,7 +46,7 @@ namespace KmipCardsApi
             {
                 builder.ConfigurationBuilder
                     .SetBasePath(Environment.CurrentDirectory)
-                    .AddJsonFile("local.settings.json")
+                 //   .AddJsonFile("local.settings.json")
                     .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
                     .Build();
             }

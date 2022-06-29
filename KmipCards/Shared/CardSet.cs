@@ -1,7 +1,7 @@
 ﻿using KmipCards.Shared;
 using System.Collections.Generic;
 
-namespace KmipCards.Client.Model
+namespace KmipCards.Shared
 {
     public class CardSet
     {

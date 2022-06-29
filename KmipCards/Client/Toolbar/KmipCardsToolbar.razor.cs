@@ -70,7 +70,7 @@ namespace KmipCards.Client.Toolbar
             var appData = await CardRepository.GetAppDataAsync();
             var existingNames = appData.Cardsets.Select(cs => cs.Name).ToList();
             var newSetName = GetNewSetName(existingNames);
-            appData.Cardsets.Add(new Model.CardSet(newSetName, new List<CardRecord>()));
+            appData.Cardsets.Add(new CardSet(newSetName, new List<CardRecord>()));
             appData.DefaultCardSetName = newSetName;
             await CardRepository.SetAppDataAsync(appData);
             await CardSetViewModel.SetCardSet(newSetName);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using KmipCards.Shared;
+using System.Collections.Generic;
 
 namespace KmipCards.Client.Model
 {
