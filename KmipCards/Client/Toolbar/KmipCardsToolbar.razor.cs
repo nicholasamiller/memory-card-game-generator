@@ -57,6 +57,11 @@ namespace KmipCards.Client.Toolbar
             DialogService.Show<PrintDialog>("Make Printable Cards", maxWidth);
         }
 
+        private void OpenUploadDialog()
+        {
+            DialogService.Show<UploadFileDialog>("Upload Saved Set", maxWidth);
+        }
+
         private async Task OpenSetDialog()
         {
             var setNames = (await CardRepository.GetAppDataAsync()).Cardsets.Select(cs => cs.Name).ToList();
@@ -90,5 +95,9 @@ namespace KmipCards.Client.Toolbar
             return newSetName;
 
         }
+
+
+
+        
     }
 }

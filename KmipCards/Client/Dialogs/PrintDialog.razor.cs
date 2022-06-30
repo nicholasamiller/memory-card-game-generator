@@ -25,7 +25,7 @@ namespace KmipCards.Client.Dialogs
         }
 
         [Inject]
-        private ICardSetViewModel CardRepository { get; set; }
+        private ICardSetViewModel CardSetViewModel { get; set; }
 
 
         [Inject]
@@ -49,11 +49,11 @@ namespace KmipCards.Client.Dialogs
         private async Task GeneratePdf()
         {
 
-            var currentCards = await CardRepository.LoadInitialCards();
+            var currentCards = await CardSetViewModel.GetCards();
 
             var specs = currentCards.Select(c => new CardPairSpec(new ChineseCardSpec(c.CardDataDto.Chinese, c.CardDataDto.Pinyin), new EnglishCardSpec(c.CardDataDto.English))).ToList();
 
-            var name = CardRepository.CurrentlyLoadedListName + ".pdf";
+            var name = CardSetViewModel.CurrentlyLoadedListName + ".pdf";
             using (var outputStream = new MemoryStream())
             {
                 await MemoryCardGameGenerator.Drawing.Generate.WritePdfAsync(outputStream, specs, ConvertNumberOfCardsToCardsPerRow(_cardsPerPage));

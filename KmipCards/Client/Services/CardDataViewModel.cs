@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace KmipCards.Client.Services
 {
     
-    public class CardDataViewModel : Interfaces.ICardSetViewModel
+    public class CardSetViewModel : Interfaces.ICardSetViewModel
     {
         private CardSet _currentlyLoadedSet;
         private ICardRepository _cardRepo;
@@ -21,7 +21,7 @@ namespace KmipCards.Client.Services
 
         public event EventHandler<CardViewModelChanged> CardSetChanged;
 
-        public CardDataViewModel(ICardRepository cardRepository, ILoggerProvider loggerProvider)
+        public CardSetViewModel(ICardRepository cardRepository,  ILoggerProvider loggerProvider)
         {
             _cardRepo = cardRepository;
             _logger = loggerProvider.CreateLogger(this.GetType().Name);
@@ -55,16 +55,11 @@ namespace KmipCards.Client.Services
             OnViewModelChanged(null);
         }
 
-        public async Task<List<CardRecord>> LoadInitialCards()
+        public async Task<IEnumerable<CardRecord>> GetCards()
         {
-            if (_appData == null)
-            {
-                _appData = await _cardRepo.GetAppDataAsync();
-            }
-            _currentlyLoadedSet = _appData.Cardsets.FirstOrDefault(cs => cs.Name == _appData.DefaultCardSetName);
             return _currentlyLoadedSet.Cards;
         }
-
+        
         public async Task RemoveCard(CardRecord cardRecord)
         {
             _currentlyLoadedSet.Cards.Remove(cardRecord);
