@@ -21,7 +21,7 @@ namespace KmipCards.Client.Toolbar
         ICardSetViewModel CardSetViewModel { get; set; }
 
         [Inject]
-        ICardRepository CardRepository { get; set; }
+        IAppDataRepository CardRepository { get; set; }
 
         private bool _printDialogDisabled = false;
 
@@ -64,7 +64,7 @@ namespace KmipCards.Client.Toolbar
 
         private async Task OpenSetDialog()
         {
-            var setNames = (await CardRepository.GetAppDataAsync()).Cardsets.Select(cs => cs.Name).ToList();
+            var setNames = await CardRepository.GetCardSetNames(); 
             var dialogParams = new DialogParameters();
             dialogParams.Add("Sets", setNames);
             var selectedSet = DialogService.Show<OpenSetDialog>("Open Set",dialogParams,maxWidth);
@@ -72,13 +72,11 @@ namespace KmipCards.Client.Toolbar
         
         private async Task NewSet()
         {
-            var appData = await CardRepository.GetAppDataAsync();
-            var existingNames = appData.Cardsets.Select(cs => cs.Name).ToList();
-            var newSetName = GetNewSetName(existingNames);
-            appData.Cardsets.Add(new CardSet(newSetName, new List<CardRecord>()));
-            appData.DefaultCardSetName = newSetName;
-            await CardRepository.SetAppDataAsync(appData);
-            await CardSetViewModel.SetCardSet(newSetName);
+            var existingNames = await CardRepository.GetCardSetNames();
+            var newSetName = GetNewSetName(existingNames.ToList());
+            
+            await CardRepository.SaveCardSetAsync(new CardSet(newSetName, new List<CardRecord>()));
+            await CardRepository.SetDefaultCardSetName(newSetName);
             StateHasChanged();
         }
 
@@ -95,7 +93,6 @@ namespace KmipCards.Client.Toolbar
             return newSetName;
 
         }
-
 
 
         

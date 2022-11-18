@@ -15,13 +15,12 @@ namespace KmipCards.Client.Services
     public class CardSetViewModel : Interfaces.ICardSetViewModel
     {
         private CardSet _currentlyLoadedSet;
-        private ICardRepository _cardRepo;
-        private AppData _appData;
+        private IAppDataRepository _cardRepo;
         private readonly ILogger _logger;
 
         public event EventHandler<CardViewModelChanged> CardSetChanged;
 
-        public CardSetViewModel(ICardRepository cardRepository,  ILoggerProvider loggerProvider)
+        public CardSetViewModel(IAppDataRepository cardRepository,  ILoggerProvider loggerProvider)
         {
             _cardRepo = cardRepository;
             _logger = loggerProvider.CreateLogger(this.GetType().Name);
@@ -36,8 +35,8 @@ namespace KmipCards.Client.Services
         
         private async Task SaveSet()
         {
-            _appData.DefaultCardSetName = _currentlyLoadedSet.Name;
-            await _cardRepo.SetAppDataAsync(_appData);
+            await _cardRepo.SetDefaultCardSetName(this.CurrentlyLoadedListName);
+            await _cardRepo.SaveCardSetAsync(_currentlyLoadedSet);
         }
 
         public async Task AddCard(CardRecord cardRecord)
@@ -118,8 +117,7 @@ namespace KmipCards.Client.Services
 
         public async Task SetCardSet(string cardSetName)
         {
-            var appData = await _cardRepo.GetAppDataAsync();
-            _currentlyLoadedSet = appData.Cardsets.FirstOrDefault(s => s.Name == cardSetName);
+            _currentlyLoadedSet = await _cardRepo.GetCardSetAsync(cardSetName);
             OnViewModelChanged(null);
         }
     }
