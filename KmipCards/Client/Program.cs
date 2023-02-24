@@ -28,7 +28,7 @@ namespace KmipCards.Client
             // adds ILocalStorageService
             builder.Services.AddBlazoredLocalStorage();
 
-            builder.Services.AddScoped<ICardRepository, LocalStorageCardRepository>(sp => new LocalStorageCardRepository(sp.GetService<ILocalStorageService>(), sp.GetService<ILoggerProvider>()));
+            builder.Services.AddScoped<IAppDataRepository, LocalStorageCardRepository>(sp => new LocalStorageCardRepository(sp.GetService<ILocalStorageService>(), sp.GetService<ILoggerProvider>()));
             builder.Services.AddScoped<ICardSetViewModel,CardSetViewModel>();
 
             var httpClient = builder.Services.BuildServiceProvider().GetService<HttpClient>();

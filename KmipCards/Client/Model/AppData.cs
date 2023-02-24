@@ -9,11 +9,12 @@ namespace KmipCards.Client.Model
         public AppData(string defaultCardSetName, List<CardSet> cardsets)
         {
             DefaultCardSetName = defaultCardSetName;
-            Cardsets = cardsets;
+            CardSets = cardsets;
         }
 
         public string DefaultCardSetName { get; set; }
-        public List<CardSet> Cardsets { get; set; }
+        public List<CardSet> CardSets { get; set; }
+        
     }
 
   }
