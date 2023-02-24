@@ -28,9 +28,14 @@ namespace KmipCards.Client.Dialogs
 
         MudForm form;
         NewCardValidator newCardValidator;
-        
 
-        
+
+        protected override void OnInitialized()
+        {
+            _logger = _loggerFactory.CreateLogger<CharacterDialog>();
+            newCardValidator = new NewCardValidator();
+        }
+
         protected override void OnInitialized()
         {
             newCardValidator = new NewCardValidator();
